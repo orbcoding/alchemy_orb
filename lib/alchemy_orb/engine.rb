@@ -1,7 +1,6 @@
 module AlchemyOrb
   class Engine < ::Rails::Engine
     isolate_namespace AlchemyOrb
-
-    config.autoload_paths += Dir["#{config.root}/lib/**/"]
+    engine_name "alchemy_orb"
   end
 end

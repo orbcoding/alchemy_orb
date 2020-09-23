@@ -1,0 +1,7 @@
+(() => {
+	let publishBtn = document.getElementById('<%= @prev_btn_id %>')
+	if (publishBtn) {
+		if (<%= @replace_parent %>) publishBtn = publishBtn.parentElement
+		G.replaceEl({el: publishBtn, html: "<%= j render_template 'button' %>"})
+	}
+})();

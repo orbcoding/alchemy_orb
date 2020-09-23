@@ -1,0 +1,13 @@
+<%if title.present? %>
+<title><%= title %></title>
+<meta property="og:title" content="<%= title %>" />
+<% end %>
+<% if description.present? %>
+<%= tag(:meta, name: 'description', content: description, lang: language_code) %>
+<meta property="og:description" content="<%= description %>" />
+<% end %>
+<%= tag(:meta, name: 'created', content: created) if created.present? %>
+<%= tag(:meta, name: 'robots', content: robots) if robots.present? %>
+<%= tag(:meta, name: 'keywords', content: keywords, lang: language_code) if keywords.present? %>
+<% auto_discovery_link_tag(:rss, show_alchemy_page_url(@page, format: :rss)) if @page && @page.contains_feed? %>
+<meta property="og:image" content="<%= image %>" />

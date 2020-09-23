@@ -1,0 +1,74 @@
+.confirm_publish {
+	// padding-top: p(gut);
+	// padding: p(h);
+	// padding-bottom: 0;
+	// max-height: 70vh;
+	// overflow: auto;
+
+	// .confirm_publish-body {
+	// 	display: flex;
+
+	.confirm_publish-overview {
+		// @include mq($from: md) {
+		// 	padding-right: p(h);
+		// 	// padding-right: p();
+		// }
+	}
+	// }
+
+	// .confirm_publish-preview {
+	// 	border-radius: p(q);
+	// 	overflow: hidden;
+	// }
+
+	.value {
+		&.has-error {
+			label {
+				color: red;
+			}
+		}
+	}
+
+	dl {
+		margin: 2em 0;
+
+		@include mq($from: sm) {
+			margin: 2em 2em;
+		}
+
+		dt {
+			font-weight: bold;
+		}
+		dd {
+			margin-left: 20px;
+			@include mq($from: sm) {
+				margin-left: 30px;
+			}
+			margin-bottom: 1.5em;
+		}
+	}
+
+	.confirm {
+		&:disabled {
+			color: silver;
+		}
+	}
+}
+
+// That opens dialog
+#confirm_publish_button {
+	margin: 0;
+	padding-left: 1.5em;
+	padding-right: 1.5em;
+
+	// background-color: transparent;
+
+	&:hover {
+		background-color: white;
+		// background-color: rgba(175, 175, 175, 0.5);
+	}
+
+	i {
+		font-size: 1.2em;
+	}
+}
