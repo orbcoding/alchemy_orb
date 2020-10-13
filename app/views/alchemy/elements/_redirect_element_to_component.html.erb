@@ -1,0 +1,17 @@
+<%
+  # More info here
+	# app/helpers/alchemy/elements_helper.rb => render_element
+	# element stored in partial name, see local_assigns and https://guides.alchemy-cms.com/elements.html#render-a-group-of-elements-on-a-fixed-place-on-the-page
+	element = redirect_element_to_component
+	component = element.view_component.new(
+		page: @page,
+		preview_mode: @preview_mode,
+		counter: (counter rescue nil),
+		options: (options rescue {}),
+		# locals: (options.delete(:locals) rescue nil), No point as locals would be merged to view
+	)
+%>
+
+<%- cache(component.custom_cache || element) do -%>
+	<%= render component %>
+<% end %>

@@ -31,8 +31,6 @@ module AlchemyOrb::AlchemyHelper
 		opts = opts
 		.merge!(element_preview_code_attributes(element))
 
-		p 'opts'
-		p opts
 		opts
 	end
 end

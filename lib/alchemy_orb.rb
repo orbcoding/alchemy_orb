@@ -17,7 +17,7 @@ end
 
 require_relative "alchemy_orb/config"
 require_relative "alchemy_orb/extension_manager"
-require_relative "alchemy_orb/view_component_delegator"
+require_relative "alchemy_orb/view_component_manager"
 
 # Require engine
 require "alchemy_orb/engine"

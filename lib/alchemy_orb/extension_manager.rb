@@ -24,12 +24,12 @@ module AlchemyOrb::ExtensionManager
 			Dir.glob(glob).reject{|f| f.include?('/_archive/')}
 		end
 
-		# Prepends **Extension::Subspace::Namespace::Of::OriginalExtension
+		# Prepends **Extension::Namespace::Of::OriginalExtension
 		# to Namespace::Of::Original
 		def prepend_extension(file, glob, engine)
 			rel_path = root(engine).join(*glob.join('/').split('/**')[0].split('/'))
 			ext_namespace = Pathname(file).relative_path_from(rel_path).to_s.split('.')[0].classify
-			original_namespace = ext_namespace.split('Extension::')[1].split('::').drop(1).join('::').gsub('Extension', '')
+			original_namespace = ext_namespace.split('Extension::')[1].split('::').join('::').gsub('Extension', '')
 
 			original_namespace.constantize.prepend(ext_namespace.constantize)
 		end

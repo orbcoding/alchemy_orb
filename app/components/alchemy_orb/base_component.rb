@@ -5,6 +5,7 @@ class AlchemyOrb::BaseComponent < ViewComponent::Base
 		(super rescue Current.helpers) || Current.helpers
 	end
 
+	# Render a template relative from component folder
 	def render_template(name, is_partial = true)
 		auto_fill_exts = ['html.erb', 'js.erb']
 

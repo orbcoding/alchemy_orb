@@ -16,7 +16,7 @@ AlchemyOrb::Engine.config.to_prepare do
 		engine: true,
 	)
 
-	AlchemyOrb::ViewComponentDelegator.delegate(engine: true)
+	AlchemyOrb::ViewComponentManager.delegate(engine: true)
 end
 
 
@@ -36,7 +36,7 @@ Rails.application.config.to_prepare do
 		glob: ['app', 'extensions', '**', '*_extension.rb']
 	)
 
-	AlchemyOrb::ViewComponentDelegator.delegate
+	AlchemyOrb::ViewComponentManager.delegate
 end
 
 

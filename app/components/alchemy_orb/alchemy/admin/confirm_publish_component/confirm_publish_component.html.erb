@@ -3,52 +3,28 @@
 	<div class="confirm_publish-overview">
 		<div class="resource_info">
 
-			<div class="value<%= ' has-error' if errors[:title] %>">
-				<label><%= Alchemy::Content.translated_label_for('blog_post_title') %></label>
-				<p><%= @title %></p>
-			</div>
-			<% if !@page.layoutpage %>
-				<div class="value<%= ' has-error' if errors[:description] %>">
-					<label><%= Alchemy::Content.translated_label_for('blog_post_description') %></label>
-					<p><%= @description %></p>
-				</div>
-			<% end %>
-			<% if @page.page_layout == 'blog_post' %>
-				<div class="value<%= ' has-error' if errors[:image] %>">
-					<label><%= Alchemy::Content.translated_label_for('blog_post_image') %></label>
-					<p><%= @image %></p>
-				</div>
-			<% end %>
-			<div class="value">
-				<label><%= Alchemy::LegacyPageUrl.human_attribute_name(:urlname) %></label>
-				<p><%= "/#{@page.urlname}" %></p>
-			</div>
-
-			<% if @page.page_layout == 'blog_post' %>
-				<div class="value">
-					<label><%= Alchemy.t('author') %> (<%= Alchemy.t('creator') %>)</label>
-					<p><%= @page.creator_id ? Alchemist.find(@page.creator_id) &.display_name : Current.alchemist.display_name %></p>
+			<% fields.each do |field| %>
+				<div class="value<%= ' has-error' if field[:error] %>">
+					<label><%= field[:label] %></label>
+					<p><%= field[:value] %></p>
 				</div>
 			<% end %>
 		</div>
 
 		<dl>
+			help
 			<dt>Different screen sizes</dt>
 			<dd>
-				Use "Preview size" to check the page in different screen sizes, especially if you are using wide images.
-				Wide images are often cropped to fit better in smaller screens. You can use the image gravity property to change the crop focus.
+
 			</dd>
 			<% if @page.page_layout == 'blog_post' %>
-				<dt>Blog post list</dt>
-				<dd>
-					You can change the "Preview page" to check how your post will look in the blog list page. Again you can use gravity if you want to change the image crop focus.
-				</dd>
+
 			<% end %>
 		</dl>
 	</div>
 
 	<%= form_tag helpers.publish_admin_page_path(@page), {method: :post, class: 'alchemy-dialog-buttons'} do %>
 		<button type="button" onclick="window.Alchemy.closeCurrentDialog()" class="cancel secondary"><%= Alchemy.t(:cancel).capitalize %></button>
-		<%= button_tag Alchemy.t(:publish).capitalize, class: 'confirm', disabled: has_errors %>
+		<%= button_tag Alchemy.t(:publish).capitalize, class: 'confirm', disabled: fields_error? %>
 	<% end %>
 </div>
