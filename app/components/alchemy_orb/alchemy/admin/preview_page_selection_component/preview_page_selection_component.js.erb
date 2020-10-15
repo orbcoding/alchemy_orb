@@ -1,0 +1,14 @@
+const toolbar = document.querySelector('#toolbar .toolbar_buttons');
+
+toolbar.insertAdjacentHTML('beforeend', "<%= j render_template('html') %>")
+
+const selections = <%= raw @selections.to_json %>
+
+// Only triggered for jquery listening
+$('select#preview_page').on('change', function() {
+
+	const preview = document.getElementById('alchemy_preview_window')
+	if (!preview) return
+
+	preview.src = selections.find(selection => selection.name == this.value).src
+})

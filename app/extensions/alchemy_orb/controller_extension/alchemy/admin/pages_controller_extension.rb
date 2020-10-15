@@ -5,9 +5,7 @@ module AlchemyOrb::ControllerExtension::Alchemy::Admin::PagesControllerExtension
 	def edit
 		content_for :javascripts, "<script>#{view_context.render("alchemy/admin/pages/edit_global.js")}</script>".html_safe
 
-		if @page.page_layout == 'blog_post'
-			include_script
-		end
+		include_page_edit_script(@page.page_layout)
 
 		super
 	end
@@ -15,9 +13,9 @@ module AlchemyOrb::ControllerExtension::Alchemy::Admin::PagesControllerExtension
 	def show
 		Current.alchemy_edit_page = @page
 		Current.alchemy_preview_mode = true
-		if params[:show_list] && @page.page_layout == 'blog_post'
-			# @page_layout = 'no_menus'
-			@page = @page.parent
+
+		if params[:preview_page]
+			@page = Alchemy::Page.find(params[:preview_page])
 		end
 
 		super
@@ -33,7 +31,11 @@ module AlchemyOrb::ControllerExtension::Alchemy::Admin::PagesControllerExtension
 
 	private
 
-	def include_script
-		content_for :javascripts, "<script>#{view_context.render("edit_#{@page.page_layout}.js")}</script>".html_safe
+	# Includes page specific script if exists in:
+	# views/alchemy/admin/pages/_edit_#{page_layout}
+	def include_page_edit_script(page_layout)
+		if lookup_context.exists?("edit_#{page_layout}.js", ["alchemy/admin/pages"], true)
+			content_for :javascripts, "<script>#{view_context.render("edit_#{page_layout}.js")}</script>".html_safe
+		end
 	end
 end

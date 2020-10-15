@@ -1,6 +1,6 @@
 import { set } from './set';
 
-export function reactiveProp(inputreactiveProps
+export function reactiveProps(inputProps
 	// reactiveProp: {
 	// 	selector: null, // selector
 	// 	selectors: null, // selectors
@@ -15,16 +15,16 @@ export function reactiveProp(inputreactiveProps
 ) {
 	const reactiveProps = {}
 
-	Object.keys(inputreactiveProps).forEach(reactiveProp => {
-		const valueKey = `${reactiveProp}__value`;
-		const props = inputreactiveProps[reactiveProp];
+	Object.keys(inputProps).forEach(prop => {
+		const valueKey = `${prop}__value`;
+		const props = inputProps[prop];
 
 		// Get init value
 		const initValue = props.localStorage ?
 			JSON.parse(window.localStorage.getItem(props.localStorage)) :
 			props.default
 
-		Object.defineProperty(reactiveProps, reactiveProp, {
+		Object.defineProperty(reactiveProps, prop, {
 			// Getter
 			get: function() {
 				return reactiveProps[valueKey];
@@ -61,7 +61,7 @@ export function reactiveProp(inputreactiveProps
 		});
 
 		// Set init value
-		if (initValue != undefined) reactiveProps[reactiveProp] = initValue
+		if (initValue != undefined) reactiveProps[prop] = initValue
 	})
 
 	return reactiveProps;

@@ -1,0 +1,8 @@
+$base-p: 32px; // Instead of rem as not adjusted in admin
+@import '../alchemy_orb/variables';
+@import '../alchemy_orb/mq';
+@import '../alchemy_orb/mixins';
+@import '../alchemy_orb/layout';
+
+@import './admin/**/*.scss';
+@import '../../../components/alchemy_orb/alchemy/admin/**/*.scss';

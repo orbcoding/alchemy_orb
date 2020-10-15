@@ -20,4 +20,7 @@
 
 	// Add convert to jpeg checkbox
 	<%= render AlchemyOrb::Alchemy::Admin::UploadOptimizationSelectComponent.new(in_pages_edit: true) %>
+
+	// Preview page select
+	<%= render AlchemyOrb::Alchemy::Admin::PreviewPageSelectionComponent.new(@page.view_component.config.preview_page_selection) %>
 })();

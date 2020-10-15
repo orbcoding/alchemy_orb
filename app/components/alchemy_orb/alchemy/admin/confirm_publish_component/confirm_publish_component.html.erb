@@ -3,7 +3,7 @@
 	<div class="confirm_publish-overview">
 		<div class="resource_info">
 
-			<% fields.each do |field| %>
+			<% @fields.each do |field| %>
 				<div class="value<%= ' has-error' if field[:error] %>">
 					<label><%= field[:label] %></label>
 					<p><%= field[:value] %></p>
@@ -12,13 +12,9 @@
 		</div>
 
 		<dl>
-			help
-			<dt>Different screen sizes</dt>
-			<dd>
-
-			</dd>
-			<% if @page.page_layout == 'blog_post' %>
-
+			<% @help_texts.each do |text| %>
+				<dt><%= text[:title] %></dt>
+				<dd><%= text[:description] %></dd>
 			<% end %>
 		</dl>
 	</div>

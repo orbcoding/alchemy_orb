@@ -4,7 +4,7 @@
 			"#{Alchemy.t(:publish)} &nbsp; #{render_icon('cloud-upload-alt')}".html_safe,
 			{ id: 'confirm_publish_button' }
 		),
-		alchemy_engine.info_admin_page_path(@page, params: {confirm_publish: true}),
+		Alchemy::Engine.routes.url_helpers.info_admin_page_path(@page, params: {confirm_publish: true}),
 		{
 			title: Alchemy.t(:confirm_publish),
 			size: '520x320'

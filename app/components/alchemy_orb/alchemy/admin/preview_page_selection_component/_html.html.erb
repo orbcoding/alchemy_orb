@@ -1,0 +1,6 @@
+<div class="select_with_label">
+	<label><%= Alchemy.t(:preview_page) %></label>
+	<%= select_tag('preview_page',
+		options_for_select(@collection),
+		class: 'alchemy_selectbox medium') %>
+</div>

@@ -14,7 +14,7 @@ RDoc::Task.new(:rdoc) do |rdoc|
   rdoc.rdoc_files.include('lib/**/*.rb')
 end
 
-APP_RAKEFILE = File.expand_path("test/dummy/Rakefile", __dir__)
+APP_RAKEFILE = File.expand_path("spec/dummy/Rakefile", __dir__)
 load 'rails/tasks/engine.rake'
 
 load 'rails/tasks/statistics.rake'
@@ -23,10 +23,23 @@ require 'bundler/gem_tasks'
 
 require 'rake/testtask'
 
-Rake::TestTask.new(:test) do |t|
-  t.libs << 'test'
-  t.pattern = 'test/**/*_test.rb'
-  t.verbose = false
+# https://relishapp.com/rspec/rspec-core/v/3-8/docs/command-line/rake-task
+begin
+  require 'rspec/core/rake_task'
+  RSpec::Core::RakeTask.new(:spec)
+rescue LoadError
+  # no rspec available
 end
 
-task default: :test
+# Default test task
+task default: ['alchemy_orb:spec:hide_warnings', :spec]
+
+namespace :alchemy_orb do
+  namespace :spec do
+    task :hide_warnings do
+      ENV['RUBYOPT'] = '-W0'
+    end
+  end
+end
+
+

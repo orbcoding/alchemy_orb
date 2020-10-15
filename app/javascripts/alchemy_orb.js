@@ -1,4 +1,4 @@
-import 'stylesheets/application.scss';
+import './stylesheets/alchemy_orb.scss';
 
 import { importDir } from "./alchemy_orb/G/importDir";
 

@@ -9,7 +9,7 @@ Gem::Specification.new do |gem|
   gem.version     = AlchemyOrb::VERSION
   gem.authors     = ["Mikael Norlén"]
   gem.email       = ["mickenorlen@gmail.com"]
-  gem.homepage    = "TODO"
+  # gem.homepage    = "TODO"
   gem.summary     = "alchemy_cms extension"
   # gem.description = "TODO: Description of AlchemyOrb."
   gem.license     = "MIT"
@@ -25,9 +25,22 @@ Gem::Specification.new do |gem|
 
   gem.files = Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.md"]
 
-  gem.add_dependency "rails", "~> 6.0.3", ">= 6.0.3.2"
-  gem.add_dependency "alchemy_cms"
-  gem.add_dependency "awesome_print"
+  gem.add_runtime_dependency "rails", "~> 6.0.3", ">= 6.0.3.2"
+  gem.add_runtime_dependency "alchemy_cms"
+  gem.add_runtime_dependency "awesome_print"
 
   gem.add_development_dependency "sqlite3"
+
+  gem.add_development_dependency 'capybara',                     ['~> 3.0']
+  # gem.add_development_dependency 'capybara-screenshot',          ['~> 1.0']
+  gem.add_development_dependency 'factory_bot_rails',            ['~> 6.0']
+  # gem.add_development_dependency 'puma',                         ['~> 5.0']
+  # gem.add_development_dependency 'rails-controller-testing',     ['~> 1.0']
+  # gem.add_development_dependency 'rspec-activemodel-mocks',      ['~> 1.0']
+  gem.add_development_dependency 'rspec-rails',                  ['>= 4.0.0.beta2']
+  # gem.add_development_dependency 'simplecov',                    ['~> 0.17.1']
+  gem.add_development_dependency 'webdrivers',                   ['~> 4.0']
+  # gem.add_development_dependency 'webmock',                      ['~> 3.3']
+  # gem.add_development_dependency 'shoulda-matchers',             ['~> 4.0']
+
 end
