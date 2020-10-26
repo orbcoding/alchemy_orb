@@ -1,0 +1,28 @@
+(() => {
+	const body = document.querySelector('body#alchemy');
+
+	const data = {
+		pageLayout: "<%= @page.page_layout %>",
+		pageId: "<%= @page.id %>",
+		pagePublished: "<%= @page.read_attribute(:published_at).present? %>"
+	}
+
+	body.dataset.pageId = data.pageId;
+	body.dataset.pageLayout = data.pageLayout;
+	body.dataset.pagePublished = data.pagePublished;
+
+	// Add new confirm publish button
+	<%= render AlchemyOrb::Alchemy::Admin::ConfirmPublishComponent::Button.new(
+		page: @page,
+		prev_btn_id: 'publish_page_form',
+		replace_parent: true
+	) %>
+
+	// Add convert to jpeg checkbox
+	<%= render AlchemyOrb::Alchemy::Admin::UploadOptimizationSelectComponent.new(in_pages_edit: true) %>
+
+	// Preview page select
+	<%= render AlchemyOrb::Alchemy::Admin::PreviewPageSelectionComponent.new(@page.view_component.config.preview_page_selection) %>
+
+	AlchemyOrb.log('loaded alchemy_orb_edit.js')
+})();

@@ -1,4 +1,4 @@
-class AlchemyOrb::PageMetaComponent::PageMetaComponent < ApplicationComponent
+class AlchemyOrb::PageMetaComponent::PageMetaComponent < AlchemyOrb::ApplicationComponent
 	# page is defined if alchemy page, otherwise page_config
 	# Anything defined in page_meta will get priority
 	# page_meta is also retrieved from AlchemyPageComponents
@@ -9,15 +9,7 @@ class AlchemyOrb::PageMetaComponent::PageMetaComponent < ApplicationComponent
 			page_meta || {}
 		end
 
-
-		ap 'config'
-		ap page
-		ap page.view_component &.config
-
 		@page_meta = {} if !@page_meta
-
-		ap 'page_meta'
-		ap @page_meta
 	end
 
 	def title

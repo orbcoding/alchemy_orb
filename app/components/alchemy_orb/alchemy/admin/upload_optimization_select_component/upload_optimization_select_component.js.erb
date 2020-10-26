@@ -23,9 +23,6 @@
 	AlchemyOrb.on('change', '#upload_image_optimization_select', e => {
 		const target = e.el
 
-		console.log('tit', titles)
-		console.log(titles[target.value])
-
 		links.optimization = target.value
 		target.title = titles[target.value]
 	})

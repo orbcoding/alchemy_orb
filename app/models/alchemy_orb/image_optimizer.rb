@@ -28,8 +28,6 @@ module AlchemyOrb
 			]
 			@jpg_options = "-sampling-factor 4:2:0 -interlace JPEG -colorspace RGB -quality #{Alchemy::Config.get(:output_image_jpg_quality)}"
 
-			ap 'image optimizer dude23'
-
 			prepare_options
 		end
 
@@ -113,7 +111,7 @@ module AlchemyOrb
 			{
 				new_image: @new_image,
 				optimization: @applied_optimizations,
-				message: "[I] #{@messages.join('. ')}.",
+				message: "[AlchemyOrb] #{@messages.join('. ')}.",
 			}
 		end
 	end

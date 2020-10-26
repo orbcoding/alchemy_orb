@@ -1,3 +1,14 @@
+def running_tasks
+  @running_tasks ||= Rake.application.top_level_tasks
+end
+
+def running_db_task?
+  running_tasks.include?("db:create") ||
+  running_tasks.include?("db:migrate") ||
+  running_tasks.include?("db:setup") ||
+  running_tasks.include?("db:drop")
+end
+
 begin
   require 'bundler/setup'
 rescue LoadError
@@ -21,8 +32,6 @@ load 'rails/tasks/statistics.rake'
 
 require 'bundler/gem_tasks'
 
-require 'rake/testtask'
-
 # https://relishapp.com/rspec/rspec-core/v/3-8/docs/command-line/rake-task
 begin
   require 'rspec/core/rake_task'
@@ -32,12 +41,28 @@ rescue LoadError
 end
 
 # Default test task
-task default: ['alchemy_orb:spec:hide_warnings', :spec]
+task default: [
+  'alchemy_orb:spec:hide_warnings',
+  :spec
+]
 
 namespace :alchemy_orb do
   namespace :spec do
     task :hide_warnings do
       ENV['RUBYOPT'] = '-W0'
+    end
+
+    desc "Prepares database for testing Alchemy"
+    task :prepare do
+      system(
+        <<~BASH
+          cd spec/dummy && \
+          export RAILS_ENV=test && \
+          bin/rake db:create && \
+          bin/rake db:migrate && \
+          cd -
+        BASH
+      ) || fail
     end
   end
 end
