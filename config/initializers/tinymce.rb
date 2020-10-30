@@ -1,5 +1,5 @@
 # config/initializers/tinymce.rb
-exit if defined?(running_db_task?) && running_db_task?
+return if AlchemyOrb::RakeParser.running_db_task?
 
 require "alchemy_orb/asset_path_finder"
 

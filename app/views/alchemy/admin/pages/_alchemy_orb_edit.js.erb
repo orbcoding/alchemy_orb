@@ -24,5 +24,8 @@
 	// Preview page select
 	<%= render AlchemyOrb::Alchemy::Admin::PreviewPageSelectionComponent.new(@page.view_component.config.preview_page_selection) %>
 
+	// Page properties
+	<%= render AlchemyOrb::Alchemy::Admin::PagePropertiesComponent.new(@page.view_component.config.page_properties) %>
+
 	AlchemyOrb.log('loaded alchemy_orb_edit.js')
 })();

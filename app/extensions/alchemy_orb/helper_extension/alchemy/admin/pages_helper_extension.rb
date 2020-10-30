@@ -1,3 +1,4 @@
+# skip_prepend: true
 # Is included in admin pages_controller to
 module AlchemyOrb::HelperExtension::Alchemy::Admin::PagesHelperExtension
 	def preview_sizes_for_select

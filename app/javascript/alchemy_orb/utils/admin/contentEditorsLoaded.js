@@ -10,7 +10,7 @@ document.addEventListener('turbolinks:load', () => {
 		el: elArea,
 		withChild: '#main-content-elements',
 		disconnect: true,
-		obs: {childList: true}
+		observe: {childList: true}
 		}, () => {
 
 		AlchemyOrb.log('loaded content editors');
@@ -25,6 +25,7 @@ document.addEventListener('turbolinks:load', () => {
 		});
 	})
 
+	// Another jquery event
 	$('#element_area').on('FocusElementEditor.Alchemy', '.element-editor', e => {
 		AlchemyOrb.log('focusing content editor');
 		callbacks.forEach(cb => cb({ editors: [e.target], onlyListeners: false }))

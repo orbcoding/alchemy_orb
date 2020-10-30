@@ -3,18 +3,18 @@
 	<div class="confirm_publish-overview">
 		<div class="resource_info">
 
-			<% @fields.each do |field| %>
-				<div class="value<%= ' has-error' if field[:error] %>">
-					<label><%= field[:label] %></label>
-					<p><%= field[:value] %></p>
+			<% @fields.each do |k, v| %>
+				<div class="value<%= ' has-error' if v[:error] %>">
+					<label><%= v[:label] %></label>
+					<p><%= v[:value] %></p>
 				</div>
 			<% end %>
 		</div>
 
 		<dl>
-			<% @help_texts.each do |text| %>
-				<dt><%= text[:title] %></dt>
-				<dd><%= text[:description] %></dd>
+			<% @help_texts.each do |k, v| %>
+				<dt><%= v[:title] %></dt>
+				<dd><%= v[:description] %></dd>
 			<% end %>
 		</dl>
 	</div>

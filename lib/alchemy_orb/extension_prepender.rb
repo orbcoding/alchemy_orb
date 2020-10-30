@@ -1,19 +1,28 @@
-module AlchemyOrb::ExtensionLoader
+module AlchemyOrb::ExtensionPrepender
 	extend self
 
 	def call(glob:, engine: false)
-		return if engine == false && !AlchemyOrb::Config.get(:load_user_extensions)
-		return if engine == true && !AlchemyOrb::Config.get(:load_extensions)
+		return if engine == false && !AlchemyOrb::Config.get(:prepend_user_extensions)
+		return if engine == true && !AlchemyOrb::Config.get(:prepend_extensions)
 
 		files = files_except_archive(root(engine).join(*glob))
 
-		if files.length
-			puts "[AlchemyOrb] Loading#{engine ? ' engine' : ' user'} extensions #{glob.join('/')}"
+		if files.any?
+			AlchemyOrb.log("Prepending#{engine ? ' engine' : ' user'} extensions #{glob.join('/')}")
+
+			skipped_files = []
 
 			files.each do |f|
 				require_dependency(f)
-				prepend_extension(f, glob, engine)
+				firstline = File.open(f, &:readline)
+				unless firstline.include?('skip_prepend: true')
+					prepend_extension(f, glob, engine)
+				else
+					skipped_files.push(File.basename(f))
+				end
 			end
+
+			AlchemyOrb.log("skipped:\n  " + skipped_files.join("\n  "), newline: true)
 		end
 	end
 

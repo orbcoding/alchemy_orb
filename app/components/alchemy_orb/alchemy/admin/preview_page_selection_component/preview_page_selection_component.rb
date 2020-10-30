@@ -3,7 +3,7 @@ class AlchemyOrb::Alchemy::Admin::PreviewPageSelectionComponent::PreviewPageSele
     return if !selections
 
     @selections = selections
-    @collection = selections.map{|s| [s[:label], s[:name]]}
+    @collection = selections.map{|k, v| [v[:label], k]}
   end
 
   def render?

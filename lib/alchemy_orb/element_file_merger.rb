@@ -15,13 +15,10 @@ module AlchemyOrb::ElementFileMerger
 			merge_templates
 		end
 
-		puts '[AlchemyOrb] Element templates merged'
-
 		inject_templates
-
-		puts '[AlchemyOrb] Element templates injected'
-
 		merge_elements
+
+		AlchemyOrb.log('Element files merged')
 	end
 
 

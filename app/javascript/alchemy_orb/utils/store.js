@@ -3,8 +3,11 @@ export const store = {}
 
 // Register to track what has been added to avoid listener duplication
 store.listenReg = {
+	// Dialog opened listener to add select
 	upload_optimization_select_dialog: null,
 	upload_optimization_select_change: null,
+	// Page properties open
+	page_properties_dialog: null,
 }
 
 store.listenReg.new = key => {

@@ -1,5 +1,6 @@
 module AlchemyOrb::ModelExtension::Alchemy::ElementExtension
-	# include AlchemyOrb::ModelExtension::Alchemy::Element::ElementContentsExtension
+	include AlchemyOrb::ModelExtension::Alchemy::Element::ElementContentsExtension
+
 	def view_component
 		Struct.new(:element, :namespace) do
 			def new(**args)

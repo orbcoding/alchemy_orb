@@ -2,13 +2,12 @@ class AlchemyOrb::Alchemy::Admin::ConfirmPublishComponent::ConfirmPublishCompone
   def initialize(page:)
     @page = page
 
-    config = @page.view_component.config
-    @fields = config.confirm_publish_fields.sort_by{|e| e[:position]}
-    @help_texts = config.confirm_publish_help_texts.sort_by{|e| e[:position]}
-    # @component = @page.view_component
+    config = @page.view_component.config.confirm_publish
+    @fields = config[:fields].sort_by{|_k, v| v[:position]}.to_h
+    @help_texts = config[:help_texts].sort_by{|_k, v| v[:position]}.to_h
   end
 
   def fields_error?
-    @fields.any?{|field| field[:error]}
+    @fields.any?{|k, v| v[:error]}
   end
 end

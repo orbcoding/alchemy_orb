@@ -1,16 +1,16 @@
+# skip_prepend: true
+
 # Included in application.rb/before_initialize as acts_as_essence needs to be overwritten before its inheritors load
 module AlchemyOrb::ModelExtension::Alchemy::EssenceExtension
-	# def self.included(base)
-	# 	base.extend(ClassMethods)
-	# end
+	def self.included(base)
+		base.extend(ClassMethods)
+	end
 
 	module ClassMethods
-		include Alchemy::Essence::ClassMethods
-
 		def acts_as_essence(options = {})
 			class_eval <<-RUBY, __FILE__, __LINE__ + 1
 				attr_writer :contents_attributes # Add content attributes for cross validation
-				include Alchemy::EssenceExtension::InstanceMethods
+				include InstanceMethods
 			RUBY
 
 			super
@@ -130,4 +130,4 @@ module AlchemyOrb::ModelExtension::Alchemy::EssenceExtension
 	end
 end
 
-# ActiveRecord::Base.include(Alchemy::EssenceExtension)
+ActiveRecord::Base.include(AlchemyOrb::ModelExtension::Alchemy::EssenceExtension)

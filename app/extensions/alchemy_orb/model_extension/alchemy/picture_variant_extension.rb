@@ -3,7 +3,7 @@ module AlchemyOrb::ModelExtension::Alchemy::PictureVariantExtension
 	def encoded_image(image, options = {})
 		image = super
 
-		target_format = options[:format] || default_render_format
+		target_format = options[:format] || picture.default_render_format
 
 		if target_format == 'png' && picture.optimization &.split(',') &.include?('pngquant')
 			image.steps.push(Dragonfly::Job::Process.new(image, :pngquant))

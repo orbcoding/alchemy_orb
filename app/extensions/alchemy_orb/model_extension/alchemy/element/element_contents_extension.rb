@@ -1,3 +1,4 @@
+# skip_prepend: true
 # Included in Alchemy::ElementExtension
 module AlchemyOrb::ModelExtension::Alchemy::Element::ElementContentsExtension
 	def update_contents(contents_attributes)

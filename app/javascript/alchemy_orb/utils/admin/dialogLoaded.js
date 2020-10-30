@@ -1,30 +1,34 @@
-const callbacks = []
+import { on } from '../listen';
 
 export function dialogLoaded(selector, callback) {
-	dialogOpened(dialog => {
+	dialogOpened(({dialog, observer}) => {
+		// When dialog opened
+		// Check check if has selector
 		AlchemyOrb.whenMutated({
 			selector: '.alchemy-dialog-body',
-			obs: { childList: true },
+			observe: { childList: true },
 			withChild: selector,
+			disconnect: true // Disconnect inner dialog observer
 		}, ({child}) => {
-			callback({child, dialog})
+			AlchemyOrb.log('dialogLoaded ' + selector);
+			callback({child, dialog, observer})
 		})
 	})
 }
 
 export function dialogOpened(callback) {
-	callbacks.push(callback)
-
-	AlchemyOrb.on('turbolinks:load', () => {
+	on('turbolinks:load', {
+		offOnReload: true // dialogLoaded will be called again for given page
+	},  () => {
 		AlchemyOrb.whenMutated({
 			selector: 'body',
-			obs: { childList: true },
+			observe: { childList: true },
 			withChild: '.alchemy-dialog',
-		}, ({child}) => {
-			AlchemyOrb.log('dialog opened');
-			callbacks.forEach(cb => {
-				cb(child)
-			})
+			reconnectTimeout: 500, // To avoid multiple triggers
+			disconnectOnReload: true
+		}, ({child, observer}) => {
+			callback({dialog: child, observer})
 		})
 	})
 }
+

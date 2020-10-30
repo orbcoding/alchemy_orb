@@ -1,5 +1,6 @@
 module AlchemyOrb::ControllerExtension::Alchemy::Admin::PagesControllerExtension
 	def self.prepended(base)
+    base.helper AlchemyOrb::HelperExtension::Alchemy::Admin::PagesHelperExtension
 	end
 
 	def edit

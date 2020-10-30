@@ -1,0 +1,91 @@
+(() => {
+	const pageProperties = JSON.parse('<%= raw @page_properties.to_json %>')
+	const fields = pageProperties['fields'] || {}
+	const minHeight = pageProperties['min_height']
+
+	AlchemyOrb.dialogLoaded('#page_properties', ({child, dialog}) => {
+		setMinHeight(dialog, minHeight)
+
+		const map = selectorMapping(child)
+
+		updateFields(fields, map)
+	})
+
+	// Map page property fields to selectors
+	// el is dialog #page_properties container
+	function selectorMapping(el) {
+		return {
+			type: {
+				wrapper: el.querySelector('.page_page_layout')
+			},
+			status: {
+				wrapper: el.querySelector('.input.check_boxes')
+			},
+			restricted: {
+				wrapper: el.querySelector('.input.check_boxes').querySelectorAll('label.checkbox')[1]
+			},
+			name: {
+				wrapper: el.querySelector('.page_name')
+			},
+			slug: {
+				wrapper: el.querySelector('.page_urlname'),
+				input: el.querySelector('.page_urlname input')
+			},
+			title: {
+				wrapper: el.querySelector('.page_title'),
+				input: el.querySelector('.page_title input')
+			},
+			search_engines: {
+				wrapper: el.querySelectorAll('.input.check_boxes')[1]
+			},
+			description: {
+				wrapper: el.querySelector('.page_meta_description')
+			},
+			keywords: {
+				wrapper: el.querySelector('.page_meta_keywords')
+			},
+			tags: {
+				wrapper: el.querySelector('.autocomplete_tag_list')
+			},
+		}
+	}
+
+	// Update page property fields
+	function updateFields(fields, map) {
+		Object.keys(fields).forEach(key => {
+			if (fields[key]['hidden']) {
+				map[key]['wrapper'].classList.add('hide')
+
+				// Unset to auto update from page name
+				if (key == 'title' || key == 'slug') {
+					map[key]['input'].value = ''
+				}
+			}
+
+			if (fields[key]['disabled']) {
+				map[key]['input'].disabled = true
+			}
+
+			if (fields[key]['info']) {
+				map[key]['wrapper'].title = fields[key]['info']
+			}
+		})
+	}
+
+	// Set min height of dialog which can be too tall if inputs are hidden
+	function setMinHeight(dialog, minHeight) {
+		if (minHeight) {
+			dialog.style.minHeight = minHeight
+			const body = dialog.querySelector('.alchemy-dialog-body')
+
+			AlchemyOrb.whenMutated({
+				el: body,
+				observe: {
+					attributeFilter: ['style'],
+				},
+			}, ({mutations}) => {
+				body.style.removeProperty('min-height')
+			})
+		}
+	}
+})();

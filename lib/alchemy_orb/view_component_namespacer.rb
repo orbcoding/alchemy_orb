@@ -1,13 +1,15 @@
-module AlchemyOrb::ViewComponentDelegator
+module AlchemyOrb::ViewComponentNamespacer
 	extend self
 
 	# MyComponent => MyComponent::MyComponent
 	def call(engine: false)
-		puts "[AlchemyOrb] Delegating#{engine ? ' engine' : ' user'} view_component shorthand namespaces"
+		return if engine == false && !AlchemyOrb::Config.get(:apply_view_component_short_namespaces)
+
+		AlchemyOrb.log("Applying#{engine ? ' engine' : ' user'} view_component short namespaces")
 		Dir.glob(root(engine).join('app', 'components', '**', '*_component', '*_component.rb'))
 			.reject{|f| f.include?('_archive')}
 			.each do |f|
-				apply_shorthand(f, engine)
+				apply_short(f, engine)
 		end
 	end
 
@@ -18,7 +20,7 @@ module AlchemyOrb::ViewComponentDelegator
 		engine ? AlchemyOrb::Engine.root : Rails.root
 	end
 
-	def apply_shorthand(file, engine)
+	def apply_short(file, engine)
 		folder_path = File.dirname(file)
 		folder_rel_path = Pathname.new( folder_path ).relative_path_from( Pathname.new( root(engine).join('app', 'components') ) ).to_s
 		folder_namespace = folder_rel_path.classify

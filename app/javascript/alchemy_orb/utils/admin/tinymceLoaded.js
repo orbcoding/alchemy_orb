@@ -5,7 +5,7 @@ export function tinymceLoaded(editor, cb) {
 	if (container) {
 		AlchemyOrb.whenMutated({
 			el: container,
-			obs: {childList: true},
+			observe: {childList: true},
 			withChild: 'iframe',
 			disconnect: true,
 		}, ({child}) => {

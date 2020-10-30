@@ -23,52 +23,72 @@ class AlchemyOrb::Alchemy::PageComponent::Config
 		}
 	end
 
-	# eg [ 'title', 'description' ]
-	def hidden_page_properties
+	# Supported props: {hidden, disabled, info}
+	# if title or slug is hidden, they will be unset to automatically match page name
+	def page_properties
+		{
+			min_height: nil, # default is 680px
+			fields: {
+				restricted:  {
+					info: 'Restricted to authenticated admins'
+				},
+				name:  {
+					info: 'Name of page in admin area'
+				},
+				slug:  {
+					info: 'Page Url. Save empty to automatically match page name'
+				},
+				title:  {
+					info: 'Title for search engines'
+				},
+				description:  {
+					info: 'Description for search engines'
+				},
+				keywords:  {
+					info: 'Keywords for search engines, recommended max 10'
+				},
+				tags:  {
+					info: 'Site tags used for page organization'
+				},
+			}
+		}
 	end
 
 	# Which fields will be confirmed
-	def confirm_publish_fields
-		[
-      {
-        name: 'title',
-        position: 10,
-        label: 'Title',
-        value: @page.title,
-        error: !@page.title,
-      },
-      {
-        name: 'description',
-        position: 20,
-        label: 'Description',
-        value: @page.meta_description,
-        error: !@page.layoutpage && !@page.meta_description
-      },
-      {
-        name: 'urlname',
-        position: 30,
-        label: Alchemy::LegacyPageUrl.human_attribute_name(:urlname),
-        value: "/#{@page.urlname}"
-      },
-    ]
-	end
-
-	# Which help texts to show
-	def confirm_publish_help_texts
-    [
-      {
-				name: 'screen_sizes',
-				position: 10,
-        title: 'Different screen sizes',
-				description: 'Use "Preview size" to check the page in different screen sizes.'
+	def confirm_publish
+		{
+			fields: {
+				title: {
+					position: 10,
+					label: 'Title',
+					value: @page.title,
+					error: !@page.title,
+				},
+				description: {
+					position: 20,
+					label: 'Description',
+					value: @page.meta_description,
+					error: !@page.layoutpage && !@page.meta_description
+				},
+				urlname: {
+					position: 30,
+					label: Alchemy::LegacyPageUrl.human_attribute_name(:urlname),
+					value: "/#{@page.urlname}"
+				}
 			},
-			{
-				name: 'gravity',
-				position: 20,
-        title: 'Gravity',
-        description: 'Wide images such as banners are cropped to fit better in smaller screens. You can adjust their crop focus by changing gravity in picture properties.'
-			},
-    ]
+			help_texts: {
+				screen_sizes: {
+					 position: 10,
+					 title: 'Different screen sizes',
+					 description: 'Use "Preview size" to check the page in different screen sizes.'
+				 },
+				gravity: {
+					position: 20,
+					title: 'Gravity',
+					description: 'Wide images such as banners are cropped to fit better in smaller screens. You can adjust their crop focus by changing gravity in picture properties.'
+				},
+			}
+		}
 	end
 
 	# Which preview pages to select EG:

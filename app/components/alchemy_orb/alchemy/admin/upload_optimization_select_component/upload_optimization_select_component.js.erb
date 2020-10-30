@@ -1,29 +1,28 @@
 (() => {
-	const links = AlchemyOrb.reactiveProps({
+	const reactiveProps = AlchemyOrb.reactiveProps({
 		optimization: { selector: 'input#upload_image_optimization', prop: 'value' }
 	})
 
 	const titles = JSON.parse('<%= raw titles.to_json %>')
 
 	<% if @in_pages_edit %>
-	if (AlchemyOrb.store.listenReg.new('upload_optimization_select_dialog')) {
-		AlchemyOrb.dialogLoaded('#image_assign_filter_and_image_sizing', () => {
+	AlchemyOrb.dialogLoaded('#image_assign_filter_and_image_sizing', () => {
 	<% end %>
 		const form = document.querySelector('#new_picture')
 		form.insertAdjacentHTML('afterend', `<span><%= selection %></span>`)
 		form.insertAdjacentHTML('afterbegin', "<%= j(hidden_field_tag 'upload_image_optimization', false) %>")
 	<% if @in_pages_edit %>
-		})
-
-	}
+	})
 	<% end %>
 
-	if (!AlchemyOrb.store.listenReg.new('upload_optimization_select_change')) return
-
-	AlchemyOrb.on('change', '#upload_image_optimization_select', e => {
+	// Add if new
+	AlchemyOrb.on('change', {
+			selector: '#upload_image_optimization_select',
+			offOnReload: true
+		}, e => {
 		const target = e.el
 
-		links.optimization = target.value
+		reactiveProps.optimization = target.value
 		target.title = titles[target.value]
 	})
 })();

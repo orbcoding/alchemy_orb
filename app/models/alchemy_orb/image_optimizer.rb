@@ -9,7 +9,7 @@ module AlchemyOrb
 
 # Alchemy dragonfly picture
 		def initialize(picture:, format:, optimization:, convertible_format:)
-
+			@picture = picture
 			@opt_img = picture
 			@format = format
 			@optimization = optimization
@@ -19,14 +19,14 @@ module AlchemyOrb
 			@opt_size = { original: picture.size }
 			@opt_time = {}
 			@options = [
-				"-resize #{Alchemy::Config.get(
+				"-resize #{::Alchemy::Config.get(
 					@optimization == 'optimize_large' ?
 					:preprocess_image_resize_large : # Added custom large to config
 					:preprocess_image_resize
 				)}",
 				"-strip"
 			]
-			@jpg_options = "-sampling-factor 4:2:0 -interlace JPEG -colorspace RGB -quality #{Alchemy::Config.get(:output_image_jpg_quality)}"
+			@jpg_options = "-sampling-factor 4:2:0 -interlace JPEG -colorspace RGB -quality #{::Alchemy::Config.get(:output_image_jpg_quality)}"
 
 			prepare_options
 		end
@@ -90,7 +90,7 @@ module AlchemyOrb
 			prev_size = @opt_size[:original]
 			@opt_time.each{| key, value |
 				size_diff = sprintf("%+d", ((@opt_size[key].to_f / prev_size - 1) * 100).round(2))
-				@messages.push("#{key.capitalize} time #{value}, size #{size_diff}%")
+				@messages.push("#{key.capitalize} #{value}s, #{size_diff}%")
 				prev_size = @opt_size[key]
 			}
 		end
@@ -99,7 +99,11 @@ module AlchemyOrb
 		def summarize
 			size_diff = (@opt_size[:piet].to_f / @opt_size[:original] - 1) * 100
 			if size_diff < -8
-				@messages.unshift("Optimized#{' and converted' if @convert_to_jpg}, size #{sprintf("%+d", size_diff.round(2))}%. #{@opt_size[:piet].to_f / 1000}kb < #{@opt_size[:original].to_f / 1000}kb")
+				@messages.unshift(*[
+					"Optimized#{' and converted' if @convert_to_jpg} #{@picture.name}",
+					"#{@picture.width}x#{@picture.height} => #{@opt_img.width}x#{@opt_img.height}",
+					"#{@opt_size[:original].to_f / 1000}kb => #{@opt_size[:piet].to_f / 1000}kb, #{sprintf("%+d", size_diff.round(2))}%",
+				])
 				@new_image = @opt_img
 				@applied_optimizations = @opt_time.keys.join(',')
 			else
@@ -111,7 +115,7 @@ module AlchemyOrb
 			{
 				new_image: @new_image,
 				optimization: @applied_optimizations,
-				message: "[AlchemyOrb] #{@messages.join('. ')}.",
+				message: "#{@messages.join(".\n  ")}.",
 			}
 		end
 	end

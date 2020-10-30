@@ -1,5 +1,5 @@
 module AlchemyOrb::ModelExtension::Alchemy::PictureExtension
-	# include AlchemyOrb::ModelExtension::Alchemy::Picture::CalculationsExtension
+	include AlchemyOrb::ModelExtension::Alchemy::Picture::CalculationsExtension
 
 	# Adjust dragonfly image processing
 	def self.prepended(base)
@@ -13,6 +13,8 @@ module AlchemyOrb::ModelExtension::Alchemy::PictureExtension
 					optimization: Current.alchemy_upload_image_optimization,
 					convertible_format: has_convertible_format?
 				).optimize
+
+				AlchemyOrb.log(opt_info[:message], newlines: true)
 
 				self.assign_attributes(image_file: opt_info[:new_image]) if opt_info[:new_image]
 				self.assign_attributes(optimization: opt_info[:optimization]) if opt_info[:optimization]
