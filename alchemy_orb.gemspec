@@ -28,7 +28,7 @@ Gem::Specification.new do |gem|
   gem.files = Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.md"]
 
   gem.add_runtime_dependency "rails", "~> 6.0.3", ">= 6.0.3.2"
-  gem.add_runtime_dependency "alchemy_cms"
+  # gem.add_runtime_dependency "alchemy_cms"
   gem.add_runtime_dependency "awesome_print"
   gem.add_runtime_dependency "view_component"
 
