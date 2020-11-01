@@ -1,105 +1,127 @@
-// import {log} from './log';
-
-import { contentEditorsLoaded } from "./admin/contentEditorsLoaded";
-
-const registry = [];
-let offOnReloadRegs = [];
+const listenerRegistry = [];
+let offOnReloadListeners = [];
 
 // off all offOnReloadListeners before turbolinks load again
 on('turbolinks:visit', {}, () => {
-	if (!offOnReloadRegs.length) return
+	if (!offOnReloadListeners.length) return
 
-	offOnReloadRegs.forEach(reg => {off(reg)});
+	offOnReloadListeners.forEach(listener => {off(listener)});
 
-	// AlchemyOrb.log('OffOnReloadListeners', offOnReloadRegs.map(reg => listenerDescription(reg)))
-	AlchemyOrb.log('offOnReloadListeners', offOnReloadRegs.length)
+	// AlchemyOrb.log('OffOnReloadListeners', offOnReloadListeners.map(listener => listenerDescription(listener)))
+	AlchemyOrb.log('offOnReloadListeners', offOnReloadListeners.length)
 
-	offOnReloadRegs = []
+	offOnReloadListeners = []
 })
 
 // Type eg: click/turbolinks:load
-export function on(type, {
-		selector,					// Specify target for click/change
-		el = document, 		// Element to listen on
-		options, 					// Listener options
-		runOnceFirst,     // Use eg with resize if callback should run on load too
-		name, 						// Name of listener, if want to off({name}) without supplying listener
-		addOnce, 					// Use together with name if listener not same variable
-		offOnReload, 			// Off on next turbolinks visit
-		offOnTrigger			// Off when event triggered
-	}, callback) {
-	let listener;
+export function on(type, inputOps, // {
+		// el = document, 		// Element to listen on
+		// selector,					// Specify target for click/change
+		// options, 					// Listener options
+		// name, 							// Name of listener, if want to off({name}) without supplying listener
+		// runOnceFirst				// Use eg with resize if callback should run on load too
+		// addOnce, 					// Dont add event twice, use together with name if listener not same variable
+		// offOnReload, 			// Off on next turbolinks visit
+		// offOnTrigger				// Off when event triggered
+	//}
+	callback) {
 
-	if (type == 'resize') {
-		el = window
+	const listener = Object.assign(inputOps, {
+		type,
+		callback,
+		el: inputOps.el || document,
+	})
 
-		if (runOnceFirst) callback({
-			width: document.documentElement.clientWidth,
-			height: document.documentElement.clientHeight,
-		})
-		listener = e => {
-			callback({
-				event: e,
-				listener,
-				width: document.documentElement.clientWidth,
-				height: document.documentElement.clientHeight,
-			})
-			if (offOnTrigger) off({el, name, listener})
-		}
-	} else if (selector) { // Eg click/change events
-		listener = e => {
-			if (e.target.matches(selector)) {
-				callback({el: e.target, event: e, listener})
-				AlchemyOrb.log('event triggered', listenerDescription({name, type, selector}))
-			}
+	handleEventTypes(listener)
 
-			if (offOnTrigger) off({name, listener})
-		}
-	} else {
-		listener = e => {
-			callback({el: e.target, event: e, listener})
-			if (offOnTrigger) off({name, listener})
-		}
+	listener.callback = extendCallback(listener)
+
+	if (listener.runOnceFirst) {
+		listener.callback(Object.assign(listener, listener.callbackParams()))
 	}
 
 	// Dont add new listener if add once and exists
-	if (addOnce && listenerIndex({name, listener}) != -1) {
+	if (listener.addOnce && listenerIndex(listener) != -1) {
 		return false
 	}
 
-	const reg = {name, type, el, listener, selector}
-
-	if (offOnReload) {
-		offOnReloadRegs.push(reg)
+	if (listener.offOnReload) {
+		offOnReloadListeners.push(listener)
 	}
 
-	el.addEventListener(type, listener, options)
-	registry.push(reg)
+	listener.el.addEventListener(listener.type, listener.callback, listener.options)
+	listenerRegistry.push(listener)
 
 	return listener;
 }
 
 // Can off based on name or listener function
-export function off({el = document, name, listener}) {
-	const i = listenerIndex({name, listener})
+export function off(listener) {
+	const i = listenerIndex(listener)
 
 	if (i == -1) return false
 
-	el.removeEventListener(registry[i].type, listener)
-	registry.splice(i, 1)
+	listener.el.removeEventListener(listenerRegistry[i].type, listener.callback)
+	listenerRegistry.splice(i, 1)
 
 	return true
 }
 
 
-// Helper function
-function listenerIndex({name, listener}) {
-	return AlchemyOrb.findIndex(registry, reg =>
-		name ? reg.name == name :
-			reg.listener == listener
+// Helper functions
+
+function handleEventTypes(listener) {
+	const callback = listener.callback;
+	const defaultParams = e => ({el: e.target, event: e, listener})
+
+	if (listener.type == 'resize') {
+		listener.el = window
+		listener.callbackParams = () => ({
+			width: document.documentElement.clientWidth,
+			height: document.documentElement.clientHeight,
+		})
+
+		listener.callback = e => {
+			callback(Object.assign(defaultParams(e), listener.callbackParams()))
+		}
+	} else if (listener.type == 'click-outside' && listener.selector) {
+		listener.type = 'click'
+		listener.callback = e => {
+			if (!e.target.closest(listener.selector)) {
+				callback(defaultParams(e));
+			}
+		}
+	} else if (listener.selector) { // Eg click/change events
+		listener.callback = e => {
+			if (e.target.matches(listener.selector)) {
+				AlchemyOrb.log('event triggered', listenerDescription(listener))
+				callback(defaultParams(e))
+			}
+		}
+	} else {
+		listener.callback = e => {
+			callback(defaultParams(e))
+		}
+	}
+}
+
+function extendCallback(listener) {
+	const baseCallback = listener.callback;
+	return e => {
+		baseCallback(e)
+		if (listener.offOnTrigger) {
+			off(listener)
+		}
+	}
+}
+
+function listenerIndex({name, callback}) {
+	return AlchemyOrb.findIndex(listenerRegistry, l =>
+		name ? l.name == name :
+			l.callback == callback
 	);
 }
 
-function listenerDescription(reg) {
-	return `${reg.name ? `${reg.name},` : ''}${reg.type}${reg.selector ? `,${reg.selector}` : ''}`
+function listenerDescription(listener) {
+	return `${listener.name ? `${listener.name},` : ''}${listener.type}${listener.selector ? `,${listener.selector}` : ''}`
 }

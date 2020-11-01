@@ -12,7 +12,7 @@ AlchemyOrb.contentEditorsLoaded(({editors, onlyListeners}) => {
 			const minLength = el.dataset.minLength
 
 			// Link length to label counter
-			const links = AlchemyOrb.reactiveProps({
+			const links = AlchemyOrb.actionProps({
 				length: {
 					default: AlchemyOrb.trimHTML(input.value).length,
 					callback: ({newVal}) => {

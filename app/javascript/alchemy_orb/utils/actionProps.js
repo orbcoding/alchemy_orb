@@ -1,19 +1,21 @@
 import { set } from './set';
 
-export function reactiveProps(inputProps
+export function actionProps(inputProps
 	// reactiveProp: {
-	// 	selector: null, // selector
-	// 	selectors: null, // selectors
-	// 	el: null, // el
-	// 	els: null, // els
-	// 	prop: null, // dataset.someprop
-	//  default: null // default value which triggers reactiveProp
-	// 	localStorage: null, // connect to localstorage prop
-	// 	toggleClass: null, // toggles class on truthy
-	// 	callback: null // ({obj, el, newVal}) => {} run on value update
+	// 	selector, 			// selector
+	// 	selectors, 			// selectors
+	// 	el, 						// el
+	// 	els, 						// els
+	// 	attribute,			// eg. style.minHeight (accepts dot notation)
+	// 	data 						// sets data attributes
+	//  default 				// default value which triggers reactiveProp
+	// 	localStorage, 	// connect to localstorage prop
+	// 	toggleClass, 		// toggles class on truthy
+	// 	callback 				// ({obj, el, newVal}) => {} run on value update
+	//  callbackBefore  // callback before other handlers are set
 	// }
 ) {
-	const reactiveProps = {}
+	const actionProps = {}
 
 	Object.keys(inputProps).forEach(prop => {
 		const valueKey = `${prop}__value`;
@@ -24,10 +26,10 @@ export function reactiveProps(inputProps
 			JSON.parse(window.localStorage.getItem(props.localStorage)) :
 			props.default
 
-		Object.defineProperty(reactiveProps, prop, {
+		Object.defineProperty(actionProps, prop, {
 			// Getter
 			get: function() {
-				return reactiveProps[valueKey];
+				return actionProps[valueKey];
 			},
 
 			// Setter
@@ -50,27 +52,36 @@ export function reactiveProps(inputProps
 				if (props.el) els.push(props.el)
 				if (props.els) els.push(props.els)
 
+				if (props.callbackBefore) {
+					props.callbackBefore({obj: actionProps, el: props.el, els: props.els, newVal})
+				}
+
 				els.forEach(el => {
 					if (el) handleEl(el, props, newVal)
 				})
 
 				if (props.callback) {
-					props.callback({obj: reactiveProps, el: props.el, els: props.els, newVal})
+					props.callback({obj: actionProps, el: props.el, els: props.els, newVal})
 				}
 			},
 		});
 
 		// Set init value
-		if (initValue != undefined) reactiveProps[prop] = initValue
+		if (initValue != undefined) actionProps[prop] = initValue
 	})
 
-	return reactiveProps;
+	return actionProps;
 }
 
 function handleEl(el, props, newVal) {
 	// Set el props
-	if (props.prop) {
-		set(el, props.prop, newVal);
+	if (props.attribute) {
+		set(el, props.attribute, newVal);
+	}
+
+	// Set data
+	if (props.data) {
+		el.setAttribute(`data-${props.data}`, newVal);
 	}
 
 	// Toggle el class

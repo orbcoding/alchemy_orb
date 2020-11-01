@@ -1,6 +1,6 @@
 (() => {
-	const reactiveProps = AlchemyOrb.reactiveProps({
-		optimization: { selector: 'input#upload_image_optimization', prop: 'value' }
+	const actionProps = AlchemyOrb.actionProps({
+		optimization: { selector: 'input#upload_image_optimization', attribute: 'value' }
 	})
 
 	const titles = JSON.parse('<%= raw titles.to_json %>')
@@ -22,7 +22,7 @@
 		}, e => {
 		const target = e.el
 
-		reactiveProps.optimization = target.value
+		actionProps.optimization = target.value
 		target.title = titles[target.value]
 	})
 })();

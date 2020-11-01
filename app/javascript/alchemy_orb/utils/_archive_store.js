@@ -1,6 +1,8 @@
 // Goes into G
 export const store = {}
 
+console.log('here')
+
 // Register to track what has been added to avoid listener duplication
 store.listenReg = {
 	// Dialog opened listener to add select
