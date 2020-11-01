@@ -2,13 +2,14 @@ module AlchemyOrb::Config
   # Default config
   DEFAULT_CONFIG = {
     # orb extensions
-    prepend_extensions: false,
+    prepend_extensions: true,
     # extensions/**/ext/sub_folder/original/namespace_extension.rb
     # sub_folder can be eg controllers/models/helpers
-    prepend_user_extensions: false,
+    prepend_user_extensions: true,
     # MyComponent => MyComponent::MyComponent
-    apply_view_component_short_namespaces: false,
-    # AlchemyOrb.zeitwerk_ignore_underscore_archive_dirs
+    apply_view_component_short_namespaces: true,
+		# zeitwerk_ignore_underscore_archive_dirs
+		zeitwerk_ignore_archive_folders: true
 	}.freeze
 
 	class << self

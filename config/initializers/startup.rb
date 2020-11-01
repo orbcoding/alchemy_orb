@@ -22,6 +22,12 @@ AlchemyOrb::Engine.config.to_prepare do
 	AlchemyOrb::ViewComponentNamespacer.call(engine: true)
 end
 
+# Ignore **/_archive* files
+if AlchemyOrb::Config.get(:zeitwerk_ignore_archive_folders)
+	ignore_files = Dir.glob(Rails.root.join('**', '_archive*'))
+	Rails.autoloaders.main.ignore(Dir.glob(Rails.root.join('**', '*_archive*')))
+end
+
 
 
 
