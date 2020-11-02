@@ -1,3 +1,6 @@
+module AlchemyOrb
+end
+
 # Runtime dependencies must also be listed here
 require 'alchemy_cms'
 require 'awesome_print'
@@ -11,10 +14,7 @@ require_relative "alchemy_orb/element_file_merger"
 require_relative "alchemy_orb/seed_parser"
 require_relative "alchemy_orb/rake_parser"
 
+AlchemyOrb.extend AlchemyOrb::Logger
+
 # Require engine
 require "alchemy_orb/engine"
-
-module AlchemyOrb
-	extend AlchemyOrb::Logger
-end
-
