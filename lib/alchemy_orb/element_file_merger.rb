@@ -26,26 +26,22 @@ module AlchemyOrb::ElementFileMerger
 
 	def load_files
 		element_files = Rails.root.join('config', 'alchemy', 'elements', '_*elements.yml')
+		@templates = YAML.load(File.read(Rails.root.join('config', 'alchemy', 'content_templates.yml')))
 
 		general_els = nil
 
 		Dir[element_files].each do |path|
-			if File.basename(path) == '_template_elements.yml'
-				@templates = YAML.load(File.read(path))
-				next
-			end
-
 			element = YAML.load(File.read(path))
 
 			# Make sure general elements come last in lists
-			if File.basename(path) == '_general_elements.yml'
-				general_els = element
-			else
-				@elements += element if element.present?
-			end
+			# if File.basename(path) == '_general_elements.yml'
+			# 	general_els = element
+			# else
+			# end
+			@elements += element if element.present?
 		end
 
-		@elements += general_els
+		# @elements += general_els
 	end
 
 	def deep_merge_with_some_arrays(h1, h2)
@@ -111,6 +107,10 @@ module AlchemyOrb::ElementFileMerger
 	end
 
 	def merge_elements
-		File.open(Rails.root.join('config', 'alchemy', 'elements.yml'), 'w') {|f| f.write @elements.to_yaml }
+		File.open(Rails.root.join('config', 'alchemy', 'elements.yml'), 'w') {|f|
+			# Convert to json and then back to yaml will remove any aliases
+			# https://stackoverflow.com/questions/3981128/ruby-yaml-write-without-aliases
+			f.write YAML.load(@elements.to_json).to_yaml
+		}
 	end
 end

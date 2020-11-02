@@ -16,7 +16,6 @@ namespace :alchemy_orb do
         desc "Seed " + task_name + ", based on file in `db/seeds/**/*.rb`"
 
         task task_name.to_sym, [:up_or_down] => :environment do |task, args|
-          require 'alchemy_orb/seed_parser'
           args.with_defaults(up_or_down: 'up')
 
           AlchemyOrb::SeedParser.seeding_down = args[:up_or_down] == 'down'

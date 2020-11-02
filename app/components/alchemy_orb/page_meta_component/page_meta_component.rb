@@ -26,7 +26,7 @@ class AlchemyOrb::PageMetaComponent::PageMetaComponent < AlchemyOrb::Application
 	end
 
 	def image
-		@page_meta[:image] || helpers.render_elements(from_page: 'identity', only: 'identity_image', only_href: true).squish
+		@page_meta[:image] || helpers.render_elements(from_page: 'identity', only: 'identity_image', only_href: true)&.squish
 	end
 
 	def language_code

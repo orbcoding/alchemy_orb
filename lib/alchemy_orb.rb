@@ -7,6 +7,9 @@ require_relative "alchemy_orb/logger"
 require_relative "alchemy_orb/config"
 require_relative "alchemy_orb/extension_prepender"
 require_relative "alchemy_orb/view_component_namespacer"
+require_relative "alchemy_orb/element_file_merger"
+require_relative "alchemy_orb/seed_parser"
+require_relative "alchemy_orb/rake_parser"
 
 # Require engine
 require "alchemy_orb/engine"

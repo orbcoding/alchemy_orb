@@ -9,7 +9,11 @@ module AlchemyOrb::Config
     # MyComponent => MyComponent::MyComponent
     apply_view_component_short_namespaces: true,
 		# zeitwerk_ignore_underscore_archive_dirs
-		zeitwerk_ignore_archive_folders: true
+		zeitwerk_ignore_archive_folders: true,
+		# merge files Rails.root/config/alchemy/elements/_*elements.yml
+		# _template_elements.yml contains eg: text: element_template...
+		# Later used as contents: <t: ['text']
+		merge_element_files: true
 	}.freeze
 
 	class << self

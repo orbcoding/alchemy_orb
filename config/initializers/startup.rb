@@ -5,12 +5,9 @@ AlchemyOrb::Config.load_user_config
 
 # Engine
 # before_init
-# AlchemyOrb::Engine.config.before_initialize do
-# 	AlchemyOrb::ExtensionPrepender.call(
-# 		glob: ['app', 'extensions_before_initialize', '**', '*_extension.rb'],
-# 		engine: true,
-# 	)
-# end
+AlchemyOrb::Engine.config.before_initialize do
+	AlchemyOrb::ElementFileMerger.call if AlchemyOrb::Config.get(:merge_element_files)
+end
 
 # to_prepare
 AlchemyOrb::Engine.config.to_prepare do
