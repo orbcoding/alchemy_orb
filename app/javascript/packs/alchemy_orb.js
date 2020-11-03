@@ -1,7 +1,5 @@
-import '../stylesheets/alchemy_orb.scss';
+import { importDir } from "../alchemy_orb/javascript/utils/importDir";
 
-import { importDir } from "../alchemy_orb/utils/importDir";
-
-window.AlchemyOrb = importDir(require.context('../alchemy_orb/utils', true, /(?<!archive.*).js$/))
+window.AlchemyOrb = importDir(require.context('../alchemy_orb/javascript/utils', false, /(?<!archive.*).js$/))
 
 AlchemyOrb.log('loaded alchemy_orb.js');

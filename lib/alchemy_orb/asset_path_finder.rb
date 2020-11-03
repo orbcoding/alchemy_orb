@@ -2,15 +2,27 @@ module AlchemyOrb::AssetPathFinder
   extend self
 
   def alchemy_orb_js(path)
-    File.join(Gem.loaded_specs['alchemy_orb'].full_gem_path, 'app/javascript', path)
-  end
-
-  def alchemy_orb_css(path)
-    File.join(Gem.loaded_specs['alchemy_orb'].full_gem_path, 'app/javascript/stylesheets', path)
+    File.join(AlchemyOrb::Engine.root, 'app/javascript', path)
   end
 
   def alchemy_orb_asset(path)
-    File.join(Gem.loaded_specs['alchemy_orb'].full_gem_path, 'app/assets', path)
+    File.join(AlchemyOrb::Engine.root, 'app/assets', path)
+  end
+
+  def alchemy_orb_js_main
+    alchemy_orb_js('packs/alchemy_orb')
+  end
+
+  def alchemy_orb_js_admin
+    alchemy_orb_js('packs/alchemy/admin')
+  end
+
+  def alchemy_orb_css_main
+    alchemy_orb_js('packs/alchemy_orb')
+  end
+
+  def alchemy_orb_css_admin
+    alchemy_orb_js('packs/alchemy/admin')
   end
 
   # If we need precompiled asset url eg in initializer before sprockets init/asset_path is generated

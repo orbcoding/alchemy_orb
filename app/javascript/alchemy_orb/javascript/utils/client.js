@@ -8,10 +8,6 @@ export const client = actionProps({
 	},
 })
 
-if (window.frameElement) {
-	console.log(parent.document.documentElement)
-}
-
 on('turbolinks:load', { offOnTrigger: true }, () => {
 	client.canHover = !window.matchMedia("(hover: none)").matches
 })

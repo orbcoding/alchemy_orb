@@ -1,7 +1,5 @@
 # config/initializers/tinymce.rb
-return if AlchemyOrb::RakeParser.running_db_task?
-
-require "alchemy_orb/asset_path_finder"
+return if AlchemyOrb::RakeParser.running_solo_task?
 
 Alchemy::Tinymce.init = {
   content_css: AlchemyOrb::AssetPathFinder.from_manifest('tinymce_content.css'),

@@ -5,12 +5,11 @@ module AlchemyOrb::RakeParser
 		@running_tasks ||= Rake.const_defined?('Application') ? Rake.application.top_level_tasks : nil
 	end
 
-	def running_db_task?
+	def running_solo_task?
 		running_tasks && (
-			running_tasks.include?("db:create") ||
-			running_tasks.include?("db:migrate") ||
-			running_tasks.include?("db:setup") ||
-			running_tasks.include?("db:drop")
+			running_tasks.include?("db:") ||
+			running_tasks.include?("assets:") ||
+			running_tasks.include?("webpacker:")
 		)
 	end
 end

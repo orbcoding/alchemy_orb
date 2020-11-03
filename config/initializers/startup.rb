@@ -1,5 +1,5 @@
 # Dont run for rake tasks
-return if AlchemyOrb::RakeParser.running_db_task?
+return if AlchemyOrb::RakeParser.running_solo_task?
 
 AlchemyOrb::Config.load_user_config
 
