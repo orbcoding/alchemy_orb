@@ -8,7 +8,7 @@ module AlchemyOrb::ExtensionPrepender
 		files = files_except_archive(root(engine).join(*glob))
 
 		if files.any?
-			AlchemyOrb.log("Prepending#{engine ? ' engine' : ' user'} extensions #{glob.join('/')}")
+			AlchemyOrb.log("Prepending#{engine ? ' engine' : ' user'} #{glob.join('/')}")
 
 			skipped_files = []
 

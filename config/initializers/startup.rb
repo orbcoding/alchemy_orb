@@ -7,6 +7,11 @@ AlchemyOrb::Config.load_user_config
 # before_init
 AlchemyOrb::Engine.config.before_initialize do
 	AlchemyOrb::ElementFileMerger.call if AlchemyOrb::Config.get(:merge_element_files)
+
+	AlchemyOrb::ExtensionPrepender.call(
+		glob: ['app', 'extensions_before_initialize', '**', '*_extension.rb'],
+		engine: true
+	)
 end
 
 # to_prepare
