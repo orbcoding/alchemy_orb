@@ -2,7 +2,7 @@
 return if AlchemyOrb::RakeParser.running_solo_task?
 
 Alchemy::Tinymce.init = {
-  content_css: AlchemyOrb::AssetPathFinder.from_manifest('tinymce_content.css'),
+  content_css: AlchemyOrb::AssetPath.from_manifest('tinymce_content.css'),
   toolbar: [
     'bold italic underline | strikethrough subscript superscript | numlist bullist indent outdent | removeformat | fullscreen',
     'pastetext | formatselect | charmap code | undo redo | alchemy_link unlink'

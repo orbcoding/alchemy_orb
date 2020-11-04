@@ -6,10 +6,10 @@ module AlchemyOrb::RakeParser
 	end
 
 	def running_solo_task?
-		running_tasks && (
-			running_tasks.include?("db:") ||
-			running_tasks.include?("assets:") ||
-			running_tasks.include?("webpacker:")
-		)
+		running_tasks&.detect{|task|
+			task.include?('db:') ||
+			task.include?("assets:") ||
+			task.include?("webpacker:")
+		}
 	end
 end

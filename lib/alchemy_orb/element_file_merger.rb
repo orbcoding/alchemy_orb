@@ -1,8 +1,6 @@
 module AlchemyOrb::ElementFileMerger
 	extend self
 
-	require 'alchemy_orb/asset_path_finder'
-
 	def call
 		@templates = nil
 		@merged_templates = {}
@@ -57,7 +55,7 @@ module AlchemyOrb::ElementFileMerger
 	def fix_asset_paths
 		@templates.each do |name, val|
 			@templates.dig(name, 'settings', 'tinymce', 'content_css').presence.try do |asset|
-				@templates[name]['settings']['tinymce']['content_css'] = AlchemyOrb::AssetPathFinder.from_manifest(asset)
+				@templates[name]['settings']['tinymce']['content_css'] = AlchemyOrb::AssetPath.from_manifest(asset)
 			end
 		end
 	end
