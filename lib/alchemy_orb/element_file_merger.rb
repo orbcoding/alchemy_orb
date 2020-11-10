@@ -24,7 +24,7 @@ module AlchemyOrb::ElementFileMerger
 
 	def load_files
 		element_files = Rails.root.join('config', 'alchemy', 'elements', '_*elements.yml')
-		@templates = YAML.load(File.read(Rails.root.join('config', 'alchemy', 'content_templates.yml')))
+		@templates = YAML.load(File.read(Rails.root.join('config', 'alchemy', 'content_templates.yml'))) || {}
 
 		general_els = nil
 
@@ -55,7 +55,7 @@ module AlchemyOrb::ElementFileMerger
 	def fix_asset_paths
 		@templates.each do |name, val|
 			@templates.dig(name, 'settings', 'tinymce', 'content_css').presence.try do |asset|
-				@templates[name]['settings']['tinymce']['content_css'] = AlchemyOrb::AssetPath.from_manifest(asset)
+				@templates[name]['settings']['tinymce']['content_css'] = Webpacker.manifest.lookup(asset)
 			end
 		end
 	end

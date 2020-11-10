@@ -1,5 +1,5 @@
 module AlchemyOrb::ControllerExtension::Alchemy::Admin::BaseControllerExtension
-	include Shared::ContentFor
+	include AlchemyOrb::ContentFor
 
 	def self.prepended(base)
 		base.before_action :inject_admin_assets

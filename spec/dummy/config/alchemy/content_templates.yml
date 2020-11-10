@@ -1,0 +1,9 @@
+text:
+  type: EssenceText
+
+image:
+  type: EssencePicture
+  settings:
+    crop: true
+  validate:
+  - presence: true

@@ -1,0 +1,13 @@
+- name: text
+  contents:
+  - name: text_text
+    <t: [text]
+    validate:
+    - presence: true
+
+- name: image
+  contents:
+  - name: image_image
+    <t: [image]
+    validate:
+    - min_size: 1280x720

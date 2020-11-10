@@ -25,10 +25,16 @@ AlchemyOrb::Engine.config.to_prepare do
 end
 
 # Ignore **/_archive* files
+ignore_files = Dir.glob(AlchemyOrb::Engine.root.join('app', '**', '_archive*'))
+ignore_files += Dir.glob(AlchemyOrb::Engine.root.join('lib', '**', '_archive*'))
+ignore_files += [ Rails.root.join('_docker'), Rails.root.join('_remote'), Rails.root.join('_gem_overrides') ]
+
 if AlchemyOrb::Config.get(:zeitwerk_ignore_archive_folders)
-	ignore_files = Dir.glob(Rails.root.join('**', '_archive*'))
-	Rails.autoloaders.main.ignore(Dir.glob(Rails.root.join('**', '*_archive*')))
+	ignore_files += Dir.glob(Rails.root.join('app', '**', '_archive*'))
+	ignore_files += Dir.glob(Rails.root.join('lib', '**', '_archive*'))
 end
+
+Rails.autoloaders.main.ignore(ignore_files)
 
 
 
