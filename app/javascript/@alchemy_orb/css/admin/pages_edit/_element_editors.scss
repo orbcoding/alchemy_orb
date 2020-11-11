@@ -1,0 +1,21 @@
+.element-editor {
+	&.compact-wide {
+		width: 100%;
+
+		.element_tools {
+			justify-content: flex-end;
+		}
+
+		&.foldable {
+			> .element-header {
+				.ajax-folder {
+					pointer-events: auto;
+
+					i:before {
+						content: '\f146';
+					}
+				}
+			}
+		}
+	}
+}

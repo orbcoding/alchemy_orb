@@ -1,5 +1,5 @@
 # config/initializers/tinymce.rb
-return if AlchemyOrb::RakeParser.running_solo_task?
+return if AlchemyOrb::RakeParser.running_task?
 
 Alchemy::Tinymce.init = {
   content_css: Webpacker.manifest.lookup("alchemy/tinymce_content.css"),

@@ -1,0 +1,7 @@
+class <%= @element_namespace %>::<%= @element_class %> < Alchemy::ElementComponent
+	def call
+		element_view_for(@element) do |el|
+			el.render :<%= @element_name %>
+		end
+	end
+end

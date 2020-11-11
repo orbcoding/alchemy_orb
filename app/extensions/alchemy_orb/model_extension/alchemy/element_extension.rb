@@ -2,20 +2,7 @@ module AlchemyOrb::ModelExtension::Alchemy::ElementExtension
 	include AlchemyOrb::ModelExtension::Alchemy::Element::ElementContentsExtension
 
 	def view_component
-		Struct.new(:element, :namespace) do
-			def new(**args)
-				namespace.constantize.new(element: element, **args)
-			end
-
-			def config
-				Object.const_defined?("#{namespace}::Config") ?
-					"#{namespace}::Config".constantize.new(element: element) :
-					nil
-			end
-		end.new(
-			self,
-			"alchemy/element/#{name}_component".classify
-		)
+		AlchemyOrb::ElementComponentFinder.new(element: self)
 	end
 
 	# Redirect element partials to component
