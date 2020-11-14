@@ -12,20 +12,20 @@
 	body.dataset.pagePublished = data.pagePublished;
 
 	// Add new confirm publish button
-	<%= render AlchemyOrb::Alchemy::Admin::ConfirmPublishComponent::Button.new(
+	<%= render AlchemyOrb::AlchemyAdmin::ConfirmPublishComponent::Button.new(
 		page: @page,
 		prev_btn_id: 'publish_page_form',
 		replace_parent: true
 	) %>
 
 	// Add convert to jpeg checkbox
-	<%= render AlchemyOrb::Alchemy::Admin::UploadOptimizationSelectComponent.new(in_pages_edit: true) %>
+	<%= render AlchemyOrb::AlchemyAdmin::UploadOptimizationSelectComponent.new(in_pages_edit: true) %>
 
 	// Preview page select
-	<%= render AlchemyOrb::Alchemy::Admin::PreviewPageSelectionComponent.new(@page.view_component.config.preview_page_selection) %>
+	<%= render AlchemyOrb::AlchemyAdmin::PreviewPageSelectionComponent.new(@page.view_component.config.preview_page_selection) %>
 
 	// Page properties
-	<%= render AlchemyOrb::Alchemy::Admin::PagePropertiesComponent.new(@page.view_component.config.page_properties) %>
+	<%= render AlchemyOrb::AlchemyAdmin::PagePropertiesComponent.new(@page.view_component.config.page_properties) %>
 
 	AlchemyOrb.log('loaded alchemy_orb_edit.js')
 })();

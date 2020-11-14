@@ -1,14 +1,19 @@
-module AlchemyOrb::ExtensionPrepender
-	extend self
+class AlchemyOrb::ExtensionPrepender < AlchemyOrb::Service
 
-	def call(glob:, engine: false)
-		return if engine == false && !AlchemyOrb::Config.get(:prepend_user_extensions)
-		return if engine == true && !AlchemyOrb::Config.get(:prepend_extensions)
+	def initialize(glob:, engine: false)
+		@engine = engine
+		@glob = glob
+		@message = "Prepending#{engine ? ' engine' : ' user'} #{glob.join('/')}"
+	end
 
-		files = files_except_archive(root(engine).join(*glob))
+	def call
+		return if @engine == false && !AlchemyOrb::Config.get(:prepend_user_extensions)
+		return if @engine == true && !AlchemyOrb::Config.get(:prepend_extensions)
+
+		files = files_except_archive(root.join(*@glob))
 
 		if files.any?
-			AlchemyOrb.log("Prepending#{engine ? ' engine' : ' user'} #{glob.join('/')}")
+			AlchemyOrb.log(@message)
 
 			skipped_files = []
 
@@ -16,7 +21,7 @@ module AlchemyOrb::ExtensionPrepender
 				require_dependency(f)
 				firstline = File.open(f, &:readline)
 				unless firstline.include?('skip_prepend: true')
-					prepend_extension(f, glob, engine)
+					prepend_extension(f)
 				else
 					skipped_files.push(File.basename(f))
 				end
@@ -35,15 +40,15 @@ module AlchemyOrb::ExtensionPrepender
 
 	# Prepends **Extension::Namespace::Of::OriginalExtension
 	# to Namespace::Of::Original
-	def prepend_extension(file, glob, engine)
-		rel_path = root(engine).join(*glob.join('/').split('/**')[0].split('/'))
+	def prepend_extension(file)
+		rel_path = root.join(*@glob.join('/').split('/**')[0].split('/'))
 		ext_namespace = Pathname(file).relative_path_from(rel_path).to_s.split('.')[0].classify
-		original_namespace = ext_namespace.split('Extension::')[1].split('::').join('::').gsub('Extension', '')
+		original_namespace = ext_namespace.split('Extension::')[1].split('::').join('::').split('Extension').first
 
 		original_namespace.constantize.prepend(ext_namespace.constantize)
 	end
 
-	def root(engine = false)
-		engine ? AlchemyOrb::Engine.root : Rails.root
+	def root
+		@engine ? AlchemyOrb::Engine.root : Rails.root
 	end
 end

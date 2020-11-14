@@ -1,4 +1,4 @@
-class AlchemyOrb::Alchemy::Admin::UploadOptimizationSelectComponent::UploadOptimizationSelectComponent < AlchemyOrb::Alchemy::AdminComponent
+class AlchemyOrb::AlchemyAdmin::UploadOptimizationSelectComponent::UploadOptimizationSelectComponent < AlchemyOrb::AlchemyAdminComponent
 	def initialize(in_pages_edit: false)
 		@in_pages_edit = in_pages_edit
 	end

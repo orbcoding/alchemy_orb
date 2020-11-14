@@ -10,7 +10,6 @@ module AlchemyOrb::RakeParser
 	end
 
 	def running_task?
-		# ap defined? Rails::Generators
 		running_tasks || running_generator?
 	end
 

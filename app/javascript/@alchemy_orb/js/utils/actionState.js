@@ -1,6 +1,6 @@
 import { set } from './set';
 
-export function actionProps(inputProps
+export function actionState(stateProps
 	// reactiveProp: {
 	// 	selector, 			// selector
 	// 	selectors, 			// selectors
@@ -15,21 +15,21 @@ export function actionProps(inputProps
 	//  callbackBefore  // callback before other handlers are set
 	// }
 ) {
-	const actionProps = {}
+	const actionState = {}
 
-	Object.keys(inputProps).forEach(prop => {
+	Object.keys(stateProps).forEach(prop => {
 		const valueKey = `${prop}__value`;
-		const props = inputProps[prop];
+		const props = stateProps[prop];
 
 		// Get init value
 		const initValue = props.localStorage ?
 			JSON.parse(window.localStorage.getItem(props.localStorage)) :
 			props.default
 
-		Object.defineProperty(actionProps, prop, {
+		Object.defineProperty(actionState, prop, {
 			// Getter
 			get: function() {
-				return actionProps[valueKey];
+				return actionState[valueKey];
 			},
 
 			// Setter
@@ -53,7 +53,7 @@ export function actionProps(inputProps
 				if (props.els) els.push(props.els)
 
 				if (props.callbackBefore) {
-					props.callbackBefore({obj: actionProps, el: props.el, els: props.els, newVal})
+					props.callbackBefore({obj: actionState, el: props.el, els: props.els, newVal})
 				}
 
 				els.forEach(el => {
@@ -61,16 +61,16 @@ export function actionProps(inputProps
 				})
 
 				if (props.callback) {
-					props.callback({obj: actionProps, el: props.el, els: props.els, newVal})
+					props.callback({obj: actionState, el: props.el, els: props.els, newVal})
 				}
 			},
 		});
 
 		// Set init value
-		if (initValue != undefined) actionProps[prop] = initValue
+		if (initValue != undefined) actionState[prop] = initValue
 	})
 
-	return actionProps;
+	return actionState;
 }
 
 function handleEl(el, props, newVal) {

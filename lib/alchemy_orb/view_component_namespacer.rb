@@ -1,28 +1,46 @@
-module AlchemyOrb::ViewComponentNamespacer
-	extend self
+class AlchemyOrb::ViewComponentNamespacer < AlchemyOrb::Service
+	def initialize(engine: false)
+		@engine = engine
+		@globs = [
+			'app/components/**/*_component/*_component.rb',
+			'app/components_alchemy/**/*_component/*_component.rb',
+		]
+		@message = "Applying#{engine ? ' engine' : ' user'} view_component short namespaces"
+	end
 
 	# MyComponent => MyComponent::MyComponent
-	def call(engine: false)
-		return if engine == false && !AlchemyOrb::Config.get(:apply_view_component_short_namespaces)
+	def call
+		return if @engine == false && !AlchemyOrb::Config.get(:apply_view_component_short_namespaces)
 
-		AlchemyOrb.log("Applying#{engine ? ' engine' : ' user'} view_component short namespaces")
-		Dir.glob(root(engine).join('app', 'components', '**', '*_component', '*_component.rb'))
-			.reject{|f| f.include?('_archive')}
-			.each do |f|
-				apply_short(f, engine)
-		end
+		AlchemyOrb.log(@message)
+
+
+		globs_apply_short
 	end
 
 
 	private
 
-	def root(engine = false)
-		engine ? AlchemyOrb::Engine.root : Rails.root
+	def root
+		@engine ? AlchemyOrb::Engine.root : Rails.root
 	end
 
-	def apply_short(file, engine)
+	def globs_apply_short
+		@globs.each do |glob|
+			Dir.glob(root.join(glob))
+				.reject{|f| f.include?('_archive')}
+				.each do |f|
+					file_apply_short(f, glob)
+				end
+		end
+	end
+
+	def file_apply_short(file, glob)
 		folder_path = File.dirname(file)
-		folder_rel_path = Pathname.new( folder_path ).relative_path_from( Pathname.new( root(engine).join('app', 'components') ) ).to_s
+		folder_rel_path = Pathname.new( folder_path ).relative_path_from( Pathname.new(
+			root.join(glob.split('**').first
+		))).to_s
+
 		folder_namespace = folder_rel_path.classify
 		component_class_name = folder_namespace.demodulize
 

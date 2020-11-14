@@ -55,7 +55,7 @@ module AlchemyOrb::ElementFileMerger
 	def fix_asset_paths
 		@templates.each do |name, val|
 			@templates.dig(name, 'settings', 'tinymce', 'content_css').presence.try do |asset|
-				@templates[name]['settings']['tinymce']['content_css'] = Webpacker.manifest.lookup(asset)
+				@templates[name]['settings']['tinymce']['content_css'] = AlchemyOrb::AssetPath.get(asset)
 			end
 		end
 	end

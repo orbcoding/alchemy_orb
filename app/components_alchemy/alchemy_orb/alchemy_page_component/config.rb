@@ -1,4 +1,4 @@
-class AlchemyOrb::Alchemy::PageComponent::Config
+class AlchemyOrb::AlchemyPageComponent::Config
 	include AlchemyOrb::AlchemyHelper
 
 	def initialize(page:)

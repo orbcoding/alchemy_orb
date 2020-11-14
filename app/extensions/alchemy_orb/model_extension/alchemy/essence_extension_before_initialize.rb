@@ -1,7 +1,7 @@
 # skip_prepend: true
 
-# Included in application.rb/before_initialize as acts_as_essence needs to be overwritten before its inheritors load
-module AlchemyOrb::ModelExtension::Alchemy::EssenceExtension
+# before_initialize as acts_as_essence needs to be overwritten before its inheritors load
+module AlchemyOrb::ModelExtension::Alchemy::EssenceExtensionBeforeInitialize
 	def self.included(base)
 		base.extend(ClassMethods)
 	end
@@ -91,6 +91,12 @@ module AlchemyOrb::ModelExtension::Alchemy::EssenceExtension
 			[name, value]
 		end
 
+		# validate:
+    # - if:
+    #   - content: recipe_prep_time_qty
+    #     presence: true
+    #     then: { presence: true}
+
 		def validate_if(conditions)
 			conditions.each do |condition|
 				condition['then'].keys.each do |validation|
@@ -130,4 +136,4 @@ module AlchemyOrb::ModelExtension::Alchemy::EssenceExtension
 	end
 end
 
-ActiveRecord::Base.include(AlchemyOrb::ModelExtension::Alchemy::EssenceExtension)
+ActiveRecord::Base.include(AlchemyOrb::ModelExtension::Alchemy::EssenceExtensionBeforeInitialize)

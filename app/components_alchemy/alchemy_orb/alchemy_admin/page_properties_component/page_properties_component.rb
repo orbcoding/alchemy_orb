@@ -1,4 +1,4 @@
-class AlchemyOrb::Alchemy::Admin::PagePropertiesComponent::PagePropertiesComponent < AlchemyOrb::Alchemy::AdminComponent
+class AlchemyOrb::AlchemyAdmin::PagePropertiesComponent::PagePropertiesComponent < AlchemyOrb::AlchemyAdminComponent
   def initialize(page_properties)
     @page_properties = page_properties || { fields: {}}
   end

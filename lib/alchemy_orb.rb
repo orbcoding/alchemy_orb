@@ -6,8 +6,9 @@ require 'alchemy_cms'
 require 'awesome_print'
 require 'view_component'
 
+require_relative "alchemy_orb/service"
 require_relative "alchemy_orb/logger"
-#require_relative 'alchemy_orb/asset_path'
+require_relative 'alchemy_orb/asset_path'
 require_relative "alchemy_orb/config"
 require_relative "alchemy_orb/extension_prepender"
 require_relative "alchemy_orb/view_component_namespacer"

@@ -1,4 +1,4 @@
-class AlchemyOrb::Alchemy::Admin::ConfirmPublishComponent::ConfirmPublishComponent < AlchemyOrb::Alchemy::AdminComponent
+class AlchemyOrb::AlchemyAdmin::ConfirmPublishComponent::ConfirmPublishComponent < AlchemyOrb::AlchemyAdminComponent
   def initialize(page:)
     @page = page
 

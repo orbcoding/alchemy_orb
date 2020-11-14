@@ -23,7 +23,7 @@ module AlchemyOrb::ControllerExtension::Alchemy::Admin::PagesControllerExtension
 
 	def info
 		if params[:confirm_publish]
-			render AlchemyOrb::Alchemy::Admin::ConfirmPublishComponent.new(page: @page)
+			render AlchemyOrb::AlchemyAdmin::ConfirmPublishComponent.new(page: @page)
 		else
 			super
 		end

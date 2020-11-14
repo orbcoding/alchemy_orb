@@ -8,7 +8,7 @@ export function dialogLoaded(selector, callback) {
 			selector: '.alchemy-dialog-body',
 			observe: { childList: true },
 			withChild: selector,
-			disconnect: true // Disconnect inner dialog observer
+			reconnectTimeout: 500,
 		}, ({child}) => {
 			AlchemyOrb.log('dialogLoaded ' + selector);
 			callback({child, dialog, observer})

@@ -3,7 +3,10 @@ module AlchemyOrb::AlchemyHelper
 
 	def present_element_view_for(element, opts = {}, &block)
 		unless klass = opts.delete(:p)
-			klass = "#{element.name.camelize}Presenter".constantize
+			base_klass = "#{element.name.camelize}Presenter"
+			klass = Object.const_defined?(base_klass) ?
+				base_klass :
+				"#{element.view_component.namespace}::#{base_klass}".constantize
 		end
 
 		element_view_for(element, opts) do |el|

@@ -1,4 +1,6 @@
-# Dont run for rake tasks
+Rails.application.config.assets.paths << AlchemyOrb::AssetPath.javascript
+
+# Dont run rest for rake tasks
 return if AlchemyOrb::RakeParser.running_task?
 
 AlchemyOrb::Config.load_user_config
@@ -9,7 +11,7 @@ AlchemyOrb::Engine.config.before_initialize do
 	AlchemyOrb::ElementFileMerger.call if AlchemyOrb::Config.get(:merge_element_files)
 
 	AlchemyOrb::ExtensionPrepender.call(
-		glob: ['app', 'extensions_before_initialize', '**', '*_extension.rb'],
+		glob: ['app', 'extensions', '**', '*_extension_before_initialize.rb'],
 		engine: true
 	)
 end
@@ -41,11 +43,11 @@ Rails.autoloaders.main.ignore(ignore_files)
 
 # Application
 # before_init
-# Rails.application.config.before_initialize do
-# 	AlchemyOrb::ExtensionPrepender.call(
-# 		glob: ['app', 'extensions_before_initialize', '**', '*_extension.rb']
-# 	)
-# end
+Rails.application.config.before_initialize do
+	AlchemyOrb::ExtensionPrepender.call(
+		glob: ['app', 'extensions', '**', '*_extension_before_initialize.rb']
+	)
+end
 
 # to_prepare
 Rails.application.config.to_prepare do

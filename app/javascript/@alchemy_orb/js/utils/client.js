@@ -1,7 +1,7 @@
 import { on } from './listen';
-import { actionProps } from './actionProps';
+import { actionState } from './actionState';
 
-export const client = actionProps({
+export const client = actionState({
 	canHover: {
 		el: document.documentElement,
 		data: 'alchemy_orb-client-can-hover',

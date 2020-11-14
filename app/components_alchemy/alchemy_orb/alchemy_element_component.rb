@@ -1,4 +1,4 @@
-class AlchemyOrb::Alchemy::ElementComponent < AlchemyOrb::BaseComponent
+class AlchemyOrb::AlchemyElementComponent < AlchemyOrb::BaseComponent
 	delegate :render, to: :helpers
 
 	# include Alchemy::PagesHelper

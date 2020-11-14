@@ -1,5 +1,5 @@
 (() => {
-	const actionProps = AlchemyOrb.actionProps({
+	const actionState = AlchemyOrb.actionState({
 		optimization: { selector: 'input#upload_image_optimization', attribute: 'value' }
 	})
 
@@ -22,7 +22,7 @@
 		}, e => {
 		const target = e.el
 
-		actionProps.optimization = target.value
+		actionState.optimization = target.value
 		target.title = titles[target.value]
 	})
 })();

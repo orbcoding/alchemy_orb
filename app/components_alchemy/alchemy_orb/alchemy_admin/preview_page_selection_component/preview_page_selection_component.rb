@@ -1,4 +1,4 @@
-class AlchemyOrb::Alchemy::Admin::PreviewPageSelectionComponent::PreviewPageSelectionComponent < AlchemyOrb::Alchemy::AdminComponent
+class AlchemyOrb::AlchemyAdmin::PreviewPageSelectionComponent::PreviewPageSelectionComponent < AlchemyOrb::AlchemyAdminComponent
   def initialize(selections = nil)
     return if !selections
 
