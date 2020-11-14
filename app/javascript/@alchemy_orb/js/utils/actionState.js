@@ -9,6 +9,7 @@ export function actionState(stateProps
 	// 	attribute,			// eg. style.minHeight (accepts dot notation)
 	// 	data 						// sets data attributes
 	//  default 				// default value which triggers reactiveProp
+	//  getter					// Define another getter with ({value}) param
 	// 	localStorage, 	// connect to localstorage prop
 	// 	toggleClass, 		// toggles class on truthy
 	// 	callback 				// ({obj, el, newVal}) => {} run on value update
@@ -29,7 +30,11 @@ export function actionState(stateProps
 		Object.defineProperty(actionState, prop, {
 			// Getter
 			get: function() {
-				return actionState[valueKey];
+				if (stateProps.getter) {
+					getter({value: actionState[valueKey]})
+				} else {
+					return actionState[valueKey];
+				}
 			},
 
 			// Setter

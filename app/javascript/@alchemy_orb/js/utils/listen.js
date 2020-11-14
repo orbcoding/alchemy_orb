@@ -13,7 +13,7 @@ on('turbolinks:visit', {}, () => {
 	offOnReloadListeners = []
 })
 
-// Type eg: click/turbolinks:load
+// Type eg: click/turbolinks:load, TODO MORE BUT also support multiple space separated
 export function on(type, inputOps, // {
 		// el = document, 		// Element to listen on
 		// selector,					// Specify target for click/change
@@ -49,7 +49,11 @@ export function on(type, inputOps, // {
 		offOnReloadListeners.push(listener)
 	}
 
-	listener.el.addEventListener(listener.type, listener.callback, listener.options)
+	// Support space separated listeners
+	listener.type.split(' ').forEach(t => {
+		listener.el.addEventListener(t, listener.callback, listener.options)
+	})
+
 	listenerRegistry.push(listener)
 
 	return listener;
@@ -86,6 +90,13 @@ function handleEventTypes(listener) {
 		}
 	} else if (listener.type == 'click-outside' && listener.selector) {
 		listener.type = 'click'
+		listener.callback = e => {
+			if (!e.target.closest(listener.selector)) {
+				callback(defaultParams(e));
+			}
+		}
+	} else if (listener.type == 'touch-outside' && listener.selector) {
+		listener.type = 'touchstart'
 		listener.callback = e => {
 			if (!e.target.closest(listener.selector)) {
 				callback(defaultParams(e));
