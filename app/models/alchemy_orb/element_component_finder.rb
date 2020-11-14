@@ -2,7 +2,6 @@ class AlchemyOrb::ElementComponentFinder
 	def initialize(element:)
 		@element = element
 		find_namespace
-		ap @namespace
 	end
 
 	def namespace

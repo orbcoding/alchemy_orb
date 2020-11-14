@@ -2,7 +2,6 @@ class AlchemyOrb::PageComponentFinder
 	def initialize(page:)
 		@page = page
 		@namespace = "alchemy_page/#{@page.layout_partial_name}_component".classify
-		ap @namespace
 	end
 
 
