@@ -1,50 +1,23 @@
 import { actionState } from './actionState';
+import { hasTouch, watchForHover, touchEvent, hoverEvent } from './client/watchForHover';
 
 export const client = actionState({
 	touch: {
 		el: document.documentElement,
-		toggleClass: 'has-touch',
+		toggleClass: 'client-touch',
+		default: hasTouch,
+		callback: ({newVal}) => { if (newVal) document.dispatchEvent(touchEvent) }
 	},
 	hover: {
 		el: document.documentElement,
-		toggleClass: 'has-hover',
+		toggleClass: 'client-hover',
+		default: !hasTouch,
+		callback: ({newVal}) => { if (newVal) document.dispatchEvent(hoverEvent) }
 	},
 })
 
-function hasTouch() {
-  return 'ontouchstart' in document.documentElement
-         || navigator.maxTouchPoints > 0
-         || navigator.msMaxTouchPoints > 0;
-}
+watchForHover()
 
-client.touch = hasTouch()
-client.hover = !client.touch
 
-// https://stackoverflow.com/a/30303898
-// function watchForHover() {
-//   // lastTouchTime is used for ignoring emulated mousemove events
-//   let lastTouchTime = 0
 
-//   function enableHover() {
-// 		if (new Date() - lastTouchTime < 500) return
-// 		client.hover = true
-// 		client.touch = false
-//   }
 
-//   function disableHover() {
-// 		client.hover = false
-// 		client.touch = true
-//   }
-
-//   function updateLastTouchTime() {
-//     lastTouchTime = new Date()
-//   }
-
-//   document.addEventListener('touchstart', updateLastTouchTime, true)
-//   document.addEventListener('touchstart', disableHover, true)
-//   document.addEventListener('mousemove', enableHover, true)
-
-//   enableHover()
-// }
-
-// watchForHover()

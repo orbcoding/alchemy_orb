@@ -8,9 +8,10 @@ export function actionState(stateProps
 	// 	els, 						// els
 	// 	attribute,			// eg. style.minHeight (accepts dot notation)
 	// 	data 						// sets data attributes
-	//  default 				// default value which triggers reactiveProp
+	//  default  	  	  // default value which triggers actions
+	//  defaultNoAction	// default value which doesnt trigger actions
 	//  getter					// Define another getter with ({value}) param
-	// 	localStorage, 	// connect to localstorage prop
+	// 	localStorage, 	// connect to localstorage prop which will be retrieved and trigger state
 	// 	toggleClass, 		// toggles class on truthy
 	// 	callback 				// ({obj, el, newVal}) => {} run on value update
 	//  callbackBefore  // callback before other handlers are set
@@ -31,7 +32,7 @@ export function actionState(stateProps
 			// Getter
 			get: function() {
 				if (stateProps.getter) {
-					getter({value: actionState[valueKey]})
+					return getter({value: actionState[valueKey]})
 				} else {
 					return actionState[valueKey];
 				}
@@ -39,6 +40,8 @@ export function actionState(stateProps
 
 			// Setter
 			set: function(newVal) {
+				// TODO CLONE for array/object...
+				const oldVal = this[valueKey]
 				this[valueKey] = newVal
 
 				// Localstorage
@@ -66,12 +69,13 @@ export function actionState(stateProps
 				})
 
 				if (props.callback) {
-					props.callback({obj: actionState, el: props.el, els: props.els, newVal})
+					props.callback({obj: actionState, el: props.el, els: props.els, newVal, oldVal})
 				}
 			},
 		});
 
 		// Set init value
+		if (props.defaultNoAction != undefined) actionState[valueKey] = props.defaultNoAction
 		if (initValue != undefined) actionState[prop] = initValue
 	})
 

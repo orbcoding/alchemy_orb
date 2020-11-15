@@ -1,3 +1,5 @@
+import { client } from './client';
+
 const listenerRegistry = [];
 let offOnReloadListeners = [];
 
@@ -18,7 +20,7 @@ export function on(type, inputOps, // {
 		// el = document, 		// Element to listen on
 		// selector,					// Specify target for click/change
 		// options, 					// Listener options
-		// name, 							// Name of listener, if want to off({name}) without supplying listener
+		// name, 							// Name of listener, if want to off({name}) without supplying listener. Can off multiple with same name!
 		// runOnceFirst				// Use eg with resize if callback should run on load too
 		// addOnce, 					// Dont add event twice, use together with name if listener not same variable
 		// offOnReload, 			// Off on next turbolinks visit
@@ -28,10 +30,49 @@ export function on(type, inputOps, // {
 
 	const listener = Object.assign(inputOps, {
 		type,
-		callback,
 		el: inputOps.el || document,
+		originalCallback: callback, // Save it so can be extended without looping itself
 	})
 
+	const listenerTypes = listener.type.split(' ')
+
+	if (listenerTypes.length == 1) {
+		// Handle and return single listener
+		listener.originalType = listener.type // Save it as type can change eg click-outside => click 
+		return handleListener(listener)
+	} else {
+		// Handle and return multiple listeners
+		return listenerTypes.map(t => {
+			const subListener = Object.assign({}, listener)
+			subListener.type = t
+			subListener.originalType = t
+			return handleListener(subListener)
+		})
+	}
+}
+
+// listener found by = { name, callback }
+export function off(listener) {
+	if (listenerIndex(listener) == -1) return false
+
+	let offed = false;
+	let i;
+	while (i != -1) { // remove if multitype listeners with same name etc
+		i = listenerIndex(listener)
+		if (i != -1) {
+			const rmListener = listenerRegistry[i]
+			rmListener.el.removeEventListener(rmListener.type, rmListener.callback)
+			listenerRegistry.splice(i, 1)
+			offed = true
+		}
+	}
+
+	return offed
+}
+
+
+// Helper functions
+function handleListener(listener) {
 	handleEventTypes(listener)
 
 	listener.callback = extendCallback(listener)
@@ -49,73 +90,121 @@ export function on(type, inputOps, // {
 		offOnReloadListeners.push(listener)
 	}
 
-	// Support space separated listeners
-	listener.type.split(' ').forEach(t => {
-		listener.el.addEventListener(t, listener.callback, listener.options)
-	})
+	listener.el.addEventListener(listener.type, listener.callback, listener.options)
 
 	listenerRegistry.push(listener)
 
 	return listener;
 }
 
-// Can off based on name or listener function
-export function off(listener) {
-	const i = listenerIndex(listener)
-
-	if (i == -1) return false
-
-	listener.el.removeEventListener(listenerRegistry[i].type, listener.callback)
-	listenerRegistry.splice(i, 1)
-
-	return true
-}
-
-
-// Helper functions
-
+// All event types
 function handleEventTypes(listener) {
-	const callback = listener.callback;
-	const defaultParams = e => ({el: e.target, event: e, listener})
-
 	if (listener.type == 'resize') {
-		listener.el = window
-		listener.callbackParams = () => ({
-			width: document.documentElement.clientWidth,
-			height: document.documentElement.clientHeight,
-		})
-
-		listener.callback = e => {
-			callback(Object.assign(defaultParams(e), listener.callbackParams()))
-		}
+		handleResize(listener)
+	} else if (listener.type == 'client:hover') {
+		handleClientHover(listener)
+	} else if (listener.type == 'client:touch') {
+		handleClientTouch(listener)
+	} else if (listener.type == 'touch-inside' && listener.selector) {
+		handleTouchInside(listener)
+	} else if (listener.type == 'click-inside' && listener.selector) {
+		handleClickInside(listener)
 	} else if (listener.type == 'click-outside' && listener.selector) {
-		listener.type = 'click'
-		listener.callback = e => {
-			if (!e.target.closest(listener.selector)) {
-				callback(defaultParams(e));
-			}
-		}
+		handleClickOutside(listener)
 	} else if (listener.type == 'touch-outside' && listener.selector) {
-		listener.type = 'touchstart'
-		listener.callback = e => {
-			if (!e.target.closest(listener.selector)) {
-				callback(defaultParams(e));
-			}
-		}
+		handleTouchOutside(listener)
 	} else if (listener.selector) { // Eg click/change events
+		handleMatchEvent(listener)
+	} 
+	
+	if (!listener.callback) {
 		listener.callback = e => {
-			if (e.target.matches(listener.selector)) {
-				AlchemyOrb.log('event triggered', listenerDescription(listener))
-				callback(defaultParams(e))
-			}
-		}
-	} else {
-		listener.callback = e => {
-			callback(defaultParams(e))
+			callOriginalCallback(e, listener)
 		}
 	}
 }
 
+// Individual event types
+function handleResize(listener) {
+	listener.el = window
+	listener.callbackParams = () => ({
+		width: document.documentElement.clientWidth,
+		height: document.documentElement.clientHeight,
+	})
+
+	listener.callback = e => {
+		callOriginalCallback(e, listener)
+	}
+}
+
+function handleClientHover(listener) {
+	if (client.hover) listener.originalCallback(listener) // Check if already set
+	listener.type = 'client:hover' // Listen to any changes
+}
+
+function handleClientTouch(listener) {
+	if (client.touch) listener.originalCallback(listener) // Check if already set
+	listener.type = 'client:touch' // Listen to any changes
+}
+
+function handleClickInside(listener) {
+	listener.type = 'click'
+	listener.callback = e => {
+		if (e.target.closest(listener.selector)) {
+			callOriginalCallback(e, listener)
+		}
+	}
+}
+
+function handleTouchInside(listener) {
+	listener.type = 'click'
+	listener.callback = e => {
+		if (e.target.closest(listener.selector)) {
+			callOriginalCallback(e, listener)
+		}
+	}
+}
+
+function handleClickOutside(listener) {
+	listener.type = 'click'
+	listener.callback = e => {
+		if (!e.target.closest(listener.selector)) {
+			callOriginalCallback(e, listener)
+		}
+	}
+}
+
+function handleTouchOutside(listener) {
+	listener.type = 'touchstart'
+	listener.callback = e => {
+		if (!e.target.closest(listener.selector)) {
+			callOriginalCallback(e, listener)
+		}
+	}
+}
+
+function handleMatchEvent(listener) {
+	listener.callback = e => {
+		if (e.target.matches(listener.selector)) {
+			AlchemyOrb.log('event triggered', listenerDescription(listener))
+			callOriginalCallback(e, listener)
+		}
+	}
+}
+
+
+// General functions
+function callOriginalCallback(e, listener) {
+	let params = { el: e.target, event: e, listener }
+
+	if (listener.callbackParams != undefined) {
+		params = Object.assign(params, listener.callbackParams(e, listener))
+	}
+
+	listener.originalCallback(params)
+}
+
+// Extensions for all callbacks
 function extendCallback(listener) {
 	const baseCallback = listener.callback;
 	return e => {
@@ -126,6 +215,7 @@ function extendCallback(listener) {
 	}
 }
 
+// Finds listener based of name or callback
 function listenerIndex({name, callback}) {
 	return AlchemyOrb.findIndex(listenerRegistry, l =>
 		name ? l.name == name :
@@ -133,6 +223,7 @@ function listenerIndex({name, callback}) {
 	);
 }
 
+// More human listener description
 function listenerDescription(listener) {
 	return `${listener.name ? `${listener.name},` : ''}${listener.type}${listener.selector ? `,${listener.selector}` : ''}`
 }
