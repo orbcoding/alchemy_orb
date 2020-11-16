@@ -1,7 +1,7 @@
 // Goes into G
 export const store = {}
 
-console.log('here')
+console.info('in archive - SHOULD NOT SEE')
 
 // Register to track what has been added to avoid listener duplication
 store.listenReg = {

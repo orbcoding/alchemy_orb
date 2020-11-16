@@ -2,7 +2,7 @@
 // 	event.preventDefault();
 // 	event.stopPropagation();
 // 	event.stopImmediatePropagation();
-// 	console.log(el);
+// 	console.info(el);
 
 // 	body.appendChild()
 

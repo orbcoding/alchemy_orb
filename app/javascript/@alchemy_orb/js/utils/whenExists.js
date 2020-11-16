@@ -4,9 +4,9 @@ import { whenMutated } from "./whenMutated";
  * wait until an object property or element (selector) exists
  * @examples
 
- whenExists({selector: '#myElementID'}).then(el => {console.log('el found')};)
+ whenExists({selector: '#myElementID'}).then(el => {console.info('el found')};)
 
- whenExists({obj: myObj, prop: objProp}).then(prop => {console.log('prop found')};)
+ whenExists({obj: myObj, prop: objProp}).then(prop => {console.info('prop found')};)
 
  */
 export function whenExists({ obj, prop, selector, timeout = 2000, interval = 100 }, callback) {
