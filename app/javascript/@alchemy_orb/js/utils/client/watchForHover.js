@@ -29,7 +29,7 @@ export function watchForHover() {
 // Dont use these internal events. use on('client:touch/hover') instead
 export const touchEvent = new CustomEvent("client:touch", { "detail": "Custom AlchemyOrb event" });
 export const hoverEvent = new CustomEvent("client:hover", { "detail": "Custom AlchemyOrb event" });
-// export const hasTouch = 'ontouchstart' in document.documentElement
-//   || navigator.maxTouchPoints > 0
-//   || navigator.msMaxTouchPoints > 0;
+export const hasTouch = 'ontouchstart' in document.documentElement
+  || navigator.maxTouchPoints > 0
+  || navigator.msMaxTouchPoints > 0;
 
