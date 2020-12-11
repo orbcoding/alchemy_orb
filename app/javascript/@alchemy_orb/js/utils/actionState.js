@@ -60,8 +60,11 @@ export function actionState(stateProps
 				if (props.el) els.push(props.el)
 				if (props.els) els.push(props.els)
 
+				let el = props.el
+				if (!el && props.selector) el = document.querySelector(props.selector)
+
 				if (props.callbackBefore) {
-					props.callbackBefore({obj: actionState, el: props.el, els: props.els, newVal})
+					props.callbackBefore({obj: actionState, el, els: props.els, newVal})
 				}
 
 				els.forEach(el => {
@@ -69,7 +72,7 @@ export function actionState(stateProps
 				})
 
 				if (props.callback) {
-					props.callback({obj: actionState, el: props.el, els: props.els, newVal, oldVal})
+					props.callback({obj: actionState, el, els: props.els, newVal, oldVal})
 				}
 			},
 		});

@@ -38,7 +38,7 @@ export function on(type, inputOps, // {
 
 	if (listenerTypes.length == 1) {
 		// Handle and return single listener
-		listener.originalType = listener.type // Save it as type can change eg click-outside => click 
+		listener.originalType = listener.type // Save it as type can change eg click-outside => click
 		return handleListener(listener)
 	} else {
 		// Handle and return multiple listeners
@@ -115,8 +115,8 @@ function handleEventTypes(listener) {
 		handleTouchOutside(listener)
 	} else if (listener.selector) { // Eg click/change events
 		handleMatchEvent(listener)
-	} 
-	
+	}
+
 	if (!listener.callback) {
 		listener.callback = e => {
 			callOriginalCallback(e, listener)
@@ -186,7 +186,6 @@ function handleTouchOutside(listener) {
 function handleMatchEvent(listener) {
 	listener.callback = e => {
 		if (e.target.matches(listener.selector)) {
-			AlchemyOrb.log('event triggered', listenerDescription(listener))
 			callOriginalCallback(e, listener)
 		}
 	}
@@ -224,6 +223,6 @@ function listenerIndex({name, callback}) {
 }
 
 // More human listener description
-function listenerDescription(listener) {
-	return `${listener.name ? `${listener.name},` : ''}${listener.type}${listener.selector ? `,${listener.selector}` : ''}`
-}
+// function listenerDescription(listener) {
+// 	return `${listener.name ? `${listener.name},` : ''}${listener.type}${listener.selector ? `,${listener.selector}` : ''}`
+// }
