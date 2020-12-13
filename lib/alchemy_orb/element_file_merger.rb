@@ -7,13 +7,14 @@ module AlchemyOrb::ElementFileMerger
 		@elements = []
 
 		load_files
-		fix_asset_paths
 
 		while @merged_templates.keys.length < @templates.keys.length
 			merge_templates
 		end
 
 		inject_templates
+		fix_asset_paths
+
 		merge_elements
 
 		AlchemyOrb.log('Element files merged')
@@ -53,9 +54,13 @@ module AlchemyOrb::ElementFileMerger
 	end
 
 	def fix_asset_paths
-		@templates.each do |name, val|
-			@templates.dig(name, 'settings', 'tinymce', 'content_css').presence.try do |asset|
-				@templates[name]['settings']['tinymce']['content_css'] = AlchemyOrb::AssetPath.get(asset)
+		@elements.each do |element|
+			element['contents'].presence.try do |contents|
+				contents.each do |content|
+					content.dig('settings', 'tinymce', 'content_css').presence.try do |asset|
+						content['settings']['tinymce']['content_css'] = AlchemyOrb::AssetPath.get(asset)
+					end
+				end
 			end
 		end
 	end

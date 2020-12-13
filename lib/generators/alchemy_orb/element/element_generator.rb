@@ -14,10 +14,10 @@ class AlchemyOrb::ElementGenerator < Rails::Generators::NamedBase
   source_root File.expand_path('templates', __dir__)
 
   def set_vars
-    @element_namespace = "Alchemy::Element::#{name.classify}Component"
+    @element_namespace = "AlchemyElement::#{name.classify}Component"
     @element_class = @element_namespace.split('::').last # MyElement
     @element_name = @element_class.underscore # my_element
-    @element_dir_path = "app/components/#{@element_namespace.underscore}"
+    @element_dir_path = "app/alchemy_components/#{@element_namespace.underscore}"
     @element_full_path = "#{@element_dir_path}/#{@element_name}.rb"
   end
 

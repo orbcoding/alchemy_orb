@@ -1,4 +1,4 @@
-class <%= @element_namespace %>::<%= @element_class %> < Alchemy::ElementComponent
+class <%= @element_namespace %>::<%= @element_class %> < AlchemyElementComponent
 	def call
 		element_view_for(@element) do |el|
 			el.render :<%= @element_name %>

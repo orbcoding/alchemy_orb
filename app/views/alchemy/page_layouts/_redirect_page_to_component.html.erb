@@ -1,3 +1,4 @@
+<% component = @page.view_component.new %>
 <%#- cache(component.custom_cache || @page) do -%>
-<%= render @page.view_component.new %>
+	<%= render component %>
 <%# end %>

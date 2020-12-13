@@ -4,8 +4,8 @@ return if AlchemyOrb::RakeParser.running_task?
 Alchemy::Tinymce.init = {
   content_css: AlchemyOrb::AssetPath.get("tinymce_content.css"),
   toolbar: [
-    'bold italic underline | strikethrough subscript superscript | numlist bullist indent outdent | removeformat | fullscreen',
-    'pastetext | formatselect | charmap code | undo redo | alchemy_link unlink'
+    'bold italic underline | strikethrough subscript superscript | alignleft, aligncenter, alignright | numlist bullist | indent outdent',
+    'formatselect | charmap code | undo redo | alchemy_link unlink | removeformat | fullscreen'
   ],
   elementpath: false,
   block_formats: "Heading 2=h2;Paragraph=p",
