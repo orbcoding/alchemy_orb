@@ -79,7 +79,7 @@ module AlchemyOrb
 		def piet
 			@opt_time[:piet] = benchmark do
 				# png_level = @opt_time.key?(:pngquant) ? 4 : 2 # 7 max can be 1min+ and no gain
-				png_level = 2 # eg: 4 can take almost 1 min
+				png_level = 1 # eg: 4 can take almost 1 min
 				Piet.optimize(@opt_img.path, level: png_level) rescue messages.push('Piet RESCUED OUT')
 			end
 

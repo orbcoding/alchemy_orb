@@ -13,7 +13,12 @@ module AlchemyOrb::ModelExtension::Alchemy::PermissionsExtension
 		def alchemy_editor_rules
 			super
 			cannot :index, [
-				:alchemy_admin_languages
+				:alchemy_admin_languages,
+			]
+
+			can :index, [
+				:alchemy_admin_layoutpages,
+				:alchemy_admin_nodes,
 			]
 		end
 	end
@@ -23,8 +28,6 @@ module AlchemyOrb::ModelExtension::Alchemy::PermissionsExtension
 			super
 			can :index, [
 				:alchemy_admin_languages,
-				:alchemy_admin_layoutpages,
-				:alchemy_admin_nodes
 			]
 		end
 	end

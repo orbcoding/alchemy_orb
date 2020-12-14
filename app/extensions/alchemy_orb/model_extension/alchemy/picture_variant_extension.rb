@@ -1,5 +1,7 @@
 # Included in picture
 module AlchemyOrb::ModelExtension::Alchemy::PictureVariantExtension
+	include AlchemyOrb::ModelExtension::Alchemy::Picture::TransformationsExtension
+
 	def encoded_image(image, options = {})
 		image = super
 

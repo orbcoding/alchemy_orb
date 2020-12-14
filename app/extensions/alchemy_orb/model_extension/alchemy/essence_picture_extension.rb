@@ -1,4 +1,6 @@
 module AlchemyOrb::ModelExtension::Alchemy::EssencePictureExtension
+	include AlchemyOrb::ModelExtension::Alchemy::Picture::TransformationsExtension
+
 	# Allow skipping presence validation so alt text can be saved
 	def self.prepended(base)
 		base.attr_writer :skip_presence_validation

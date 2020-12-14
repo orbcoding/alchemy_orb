@@ -5,7 +5,7 @@ module AlchemyOrb::ControllerExtension::Alchemy::Admin::EssencePicturesControlle
 
 		# Fix for allowing cropping tool when width/height is same as image
 		# While still restricting/blocking crop area size
-		# Works in tandem with Picture::TransformationsExtension#is_bigger_than
+		# Works in tandem with Picture::CalculationsExtension#is_bigger_than
 		if @picture && @min_size
 			@min_size[:width] = @min_size[:width] - 1 if @picture.image_file_width == @min_size[:width]
 			@min_size[:height] = @min_size[:height] - 1 if @picture.image_file_height == @min_size[:height]

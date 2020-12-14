@@ -1,5 +1,4 @@
 # skip_prepend: true
-# Included in Picture
 module AlchemyOrb::ModelExtension::Alchemy::Picture::CalculationsExtension
 	def is_bigger_than?(dimensions)
 		# Fix to allow cropping tool when image size is equal to wanted.
